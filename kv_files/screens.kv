@@ -1,0 +1,272 @@
+<LoginScreen>:
+    pos_hint : {"center_x":.5,"center_y":.5}
+    MDScreen :
+        md_bg_color : [0.5, 0.39, 0.31, 0.5]
+        name: 'screen1'
+
+        MDCard :
+            size_hint: None, None
+            size : sp(320), sp(450)
+            pos_hint : {"center_x":.5,"center_y":.5}
+            elevation : 15
+            md_bg_color : [255/255,255/255,255/255,1]
+            padding : 20
+            spacing : 30
+            orientation : "vertical"
+            # Adding items to the card
+            MDLabel :
+                text : 'ВХОД'
+                color: [0.5, 0.39, 0.31, 1]
+                font_style : 'Button'
+                font_size : sp(45)
+                halign : "center"
+                size_hint_y : None
+                height : self.texture_size[1]
+                padding_y : 5
+                font_name: "resources/Vetka.otf"
+            MDTextFieldRound :
+                id: getusername
+                hint_text : "логин"
+                icon_right : "account"
+                size_hint_x : None
+                width : sp(220)
+                font_size : sp(25)
+                pos_hint : {"center_x":.5}
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+            MDTextFieldRound :
+                id: getparol
+                hint_text : "пароль"
+                icon_right : "eye-off"
+                size_hint_x : None
+                width : sp(220)
+                font_size : sp(25)
+                pos_hint : {"center_x":.5}
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                password : True
+                font_name: "resources/Vetka.otf"
+            MDRoundFlatButton:
+                text : 'Войти'
+                pos_hint : {"center_x":.5}
+                font_size : sp(17)
+                on_release: app.login()
+                text_color: [0, 0, 0, 0.8]
+                line_color: [0.5, 0.39, 0.31, 0.5]
+                line_width : 1.5
+                font_name: "resources/Vetka.otf"
+            MDLabel:
+                id: status
+                halign: "center"
+                font_color: [255/255, 16/255, 0/255]
+                font_style : 'Button'
+                font_size : sp(15)
+            MDRoundFlatButton:
+                text : 'Зарегистрироваться'
+                pos_hint : {"center_x":.5}
+                font_size : sp(17)
+                on_press: root.manager.current = 'registration'
+                text_color: [0, 0, 0, 0.8]
+                line_color: [0.5, 0.39, 0.31, 0.5]
+                line_width : 1.5
+                font_name: "resources/Vetka.otf"
+            Widget :
+                size_hint_y : None
+                height : sp(30)
+
+
+
+<RegistrationScreen>:
+    id: "registration"
+    MDScreen :
+        md_bg_color : [0.5, 0.39, 0.31, 0.5]
+        name: 'screen1'
+
+        MDCard :
+            size_hint : None,None
+            size : sp(320) , sp(475)
+            pos_hint : {"center_x":.5,"center_y":.5}
+            elevation : 15
+            md_bg_color : [255/255,255/255,255/255,1]
+            padding : 10
+            spacing : 14
+            orientation : "vertical"
+            # Adding items to the card
+            MDLabel :
+                text : 'РЕГИСТРАЦИЯ'
+                color: [0.5, 0.39, 0.31, 1]
+                font_style : 'Button'
+                font_size : sp(40)
+                halign : "center"
+                size_hint_y : None
+                height : self.texture_size[1]
+                padding_y : 0
+                font_name: "resources/Vetka.otf"
+            MDTextFieldRound :
+                id: getusername
+                hint_text : "логин"
+                icon_right : "account"
+                size_hint_x : None
+                width : sp(220)
+                font_size : sp(20)
+                pos_hint : {"center_x":.5}
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+            MDTextFieldRound :
+                id: getpassword1
+                hint_text : "пароль"
+                icon_right : "eye-off"
+                size_hint_x : None
+                width : sp(220)
+                font_size : sp(20)
+                pos_hint : {"center_x":.5}
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                password : True
+                font_name: "resources/Vetka.otf"
+            MDTextFieldRound :
+                id: getname
+                hint_text : "имя"
+                icon_right : "account"
+                size_hint_x : None
+                width : sp(220)
+                font_size : sp(20)
+                pos_hint : {"center_x":.5}
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+            MDTextFieldRound :
+                id: getsurname
+                hint_text : "фамилия"
+                icon_right : "account"
+                size_hint_x : None
+                width : sp(220)
+                font_size : sp(20)
+                pos_hint : {"center_x":.5}
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+            MDTextFieldRound :
+                id: getpatronymic
+                hint_text : "отчество"
+                icon_right : "account"
+                size_hint_x : None
+                width : sp(220)
+                font_size : sp(20)
+                pos_hint : {"center_x":.5}
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+            MDTextFieldRound :
+                id: getclass
+                hint_text : "класс"
+                icon_right : "account"
+                size_hint_x : None
+                width : sp(220)
+                font_size : sp(20)
+                pos_hint : {"center_x":.5}
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+            MDRoundFlatButton:
+                text : 'Зарегистрироваться'
+                pos_hint : {"center_x":.5}
+                font_size : sp(17)
+                on_release: app.signup()
+                text_color: [0, 0, 0, 0.8]
+                line_color: [0.5, 0.39, 0.31, 0.5]
+                line_width : 1.5
+                font_name: "resources/Vetka.otf"
+            MDRoundFlatButton:
+                text : 'У меня уже есть аккаунт'
+                pos_hint : {"center_x":.5}
+                font_size : sp(17)
+                on_release: app.returnt()
+                text_color: [0, 0, 0, 0.8]
+                line_color: [0.5, 0.39, 0.31, 0.5]
+                line_width : 1.5
+                font_name: "resources/Vetka.otf"
+            MDLabel:
+                id: status
+                halign: "center"
+                font_color: [255/255, 16/255, 0/255]
+                font_style : 'Button'
+                font_size : sp(15)
+            Widget :
+                size_hint_y : None
+                height : sp(30)
+
+
+<MainScreen>:
+    MDScreen:
+
+        MDBottomNavigation:
+            id: botnav
+            name: 'kuku'
+            panel_color: [0.5, 0.39, 0.31, 1]
+            # selected_color_background: get_color_from_hex("#97ecf8")
+            text_color_active: 0, 0, 0, 1
+
+            MDBottomNavigationItem:
+                id: newsnav
+                name: 'screen 1'
+                text: 'Новости'
+                icon: 'feather'
+                badge_icon: "numeric-10"
+
+            MDBottomNavigationItem:
+                id: schnav
+                name: 'screen 2'
+                icon: 'calendar-blank-outline'
+                text: 'Расписание'
+
+                MDFloatingActionButton:
+                    pos: (Window.width * 0.857, Window.height / 12)
+                    icon: "arrow-right-thick"
+                    on_press: app.arrow_right()
+                    md_bg_color: [0.5, 0.39, 0.31, 1]
+
+                MDFloatingActionButton:
+                    pos: (Window.width * -0.0015, Window.height / 12)
+                    icon: "arrow-left-thick"
+                    on_press: app.arrow_left()
+                    md_bg_color: [0.5, 0.39, 0.31, 1]
+
+<MDCardNews>
+    MDCard:
+        size_hint: (1, 1)
+        size: (Window.width - Window.width * 0.2, Window.height * 0.3)
+        elevation: 15
+        md_bg_color: [254 / 255, 255 / 255, 255 / 255, 1]
+        padding: 20
+        spacing: 30
+        orientation: "horizontal"
+
+        MDLabel:
+            id: newslabel
+            text: 'NewsLabel'
+            font_size: sp(20)
+
+<MDCardSchNumber>
+    MDCard:
+        size_hint: (1, 1)
+        size: (Window.width - Window.width * 0.7, Window.height * 0.15)
+        elevation: 15
+        md_bg_color: [254 / 255, 255 / 255, 255 / 255, 1]
+        padding: 20
+        spacing: 30
+        orientation: "horizontal"
+
+        MDLabel:
+            id: schnumlabel
+            text: 'NumLabel'
+            font_size: sp(20)
+
+<MDCardSchLesson>
+    MDCard:
+        size_hint: (1, 1)
+        size: (Window.width - Window.width * 0.7, Window.height * 0.15)
+        elevation: 15
+        md_bg_color: [254 / 255, 255 / 255, 255 / 255, 1]
+        padding: 20
+        spacing: 30
+        orientation: "horizontal"
+
+        MDLabel:
+            id: schlessonlabel
+            text: 'LessonLabel'
+            font_size: sp(18)
