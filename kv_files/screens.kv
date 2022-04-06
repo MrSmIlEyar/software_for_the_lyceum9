@@ -226,20 +226,101 @@
                     on_press: app.arrow_left()
                     md_bg_color: [0.5, 0.39, 0.31, 1]
 
+            MDBottomNavigationItem:
+                id: settoll
+                name: 'screen 3'
+                icon: 'cog'
+                text: 'Настройки'
+
+                MDCard :
+                    size_hint: None, None
+                    size : sp(320), sp(450)
+                    pos_hint : {"center_x":.5,"center_y":.5}
+                    elevation : 15
+                    md_bg_color : [255/255,255/255,255/255,1]
+                    padding : 20
+                    spacing : 30
+                    orientation : "vertical"
+                    # Adding items to the card
+
+                    MDRoundFlatButton:
+                        text : 'Выйти из аккаунта и \n\t\t приложения'
+                        pos_hint : {"center_x":.5,"center_y":.9}
+                        font_size : sp(30)
+                        on_release: app.exit_acc()
+                        text_color: [0, 0, 0, 0.8]
+                        line_color: [0.5, 0.39, 0.31, 0.5]
+                        line_width : 1.5
+                        font_name: "resources/Vetka.otf"
+
+                    MDRoundFlatButton:
+                        text : 'Выйти из приложения'
+                        pos_hint : {"center_x":.5}
+                        font_size : sp(30)
+                        on_press: app.exits()
+                        text_color: [0, 0, 0, 0.8]
+                        line_color: [0.5, 0.39, 0.31, 0.5]
+                        line_width : 1.5
+                        font_name: "resources/Vetka.otf"
+
+                    MDRoundFlatButton:
+                        text : 'Обновить новости'
+                        pos_hint : {"center_x":.5}
+                        font_size : sp(30)
+                        on_press: app.update_news()
+                        text_color: [0, 0, 0, 0.8]
+                        line_color: [0.5, 0.39, 0.31, 0.5]
+                        line_width : 1.5
+                        font_name: "resources/Vetka.otf"
+                    BoxLayout:
+                        size_hint_y: 1
+                        spacing: sp(40)
+                        MDTextFieldRound :
+                            id: getfont
+                            hint_text : "шрифт"
+                            icon_right : "format-size"
+                            size_hint_x : None
+                            width : sp(150)
+                            font_size : sp(25)
+                            pos_hint : {"center_x":.5}
+                            normal_color : [0.5, 0.39, 0.31, 0.5]
+                            font_name: "resources/Vetka.otf"
+
+                        MDRoundFlatButton:
+                            text : 'ОК'
+                            pos_hint : {"center_x":.5}
+                            font_size : sp(20)
+                            on_press: app.getfontbut()
+                            text_color: [0, 0, 0, 0.8]
+                            line_color: [0.5, 0.39, 0.31, 0.5]
+                            line_width : 1.5
+                            font_name: "resources/Vetka.otf"
+                    Widget :
+                        size_hint_y : 1
+                        height : sp(30)
+
 <MDCardNews>
     MDCard:
-        size_hint: (1, 1)
-        size: (Window.width - Window.width * 0.2, Window.height * 0.3)
-        elevation: 15
-        md_bg_color: [254 / 255, 255 / 255, 255 / 255, 1]
-        padding: 20
-        spacing: 30
-        orientation: "horizontal"
-
+        orientation: 'vertical'
+        size_hint: 1, None
+        # size: 280, 200
+        height: label1.height
         MDLabel:
-            id: newslabel
-            text: 'NewsLabel'
-            font_size: sp(20)
+            id: label1
+            markup: True
+            padding: [15, 15]
+            text:
+                '''
+                [size=25][b]Ford[/b][/size]
+                If mdlabel text becomes too many to fit into the specified mdcard size,\n
+                the text overslaps other things closeby..\n
+                So my question: How do I set MDCard height to automatically\n
+                adjusts accordingly to the height/size of widgets inside of it.\n
+                Thanks in Advance!!
+                '''
+            size_hint_y: None
+            height: self.texture_size[1] + 2*self.padding[1]
+
 
 <MDCardSchNumber>
     MDCard:
