@@ -213,7 +213,7 @@ class LoginApp(MDApp):
 
     def makenews(self):
         root = ScrollView()
-        layout = MDGridLayout(size=(Window.width, Window.height), size_hint_x=None, size_hint_y=None, cols=1,
+        layout = MDGridLayout(size=(Window.width, Window.height), size_hint_x=1, size_hint_y=None, cols=1,
                             row_default_height=sp(80), row_force_default=False, spacing=10)
         newslist = self.get_news()
         for i in newslist:
