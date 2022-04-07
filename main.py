@@ -10,6 +10,7 @@ from kivy.core.window import Window
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.label import MDLabel
 from kivymd.uix.card import MDCard
+from kivymd.uix.boxlayout import MDBoxLayout
 import requests
 import datetime
 
@@ -34,11 +35,19 @@ class MDCardNews(MDCard):
     pass
 
 
+class MDEmilNewsCard(MDCard):
+    pass
+
+
 class MDCardSchNumber(MDCard):
     pass
 
 
 class MDCardSchLesson(MDCard):
+    pass
+
+
+class MDNewsMak(ScrollView):
     pass
 
 
@@ -212,19 +221,45 @@ class LoginApp(MDApp):
         return news
 
     def makenews(self):
-        root = ScrollView()
-        layout = MDGridLayout(size=(Window.width, Window.height), size_hint_x=1, size_hint_y=None, cols=1,
-                            row_default_height=sp(80), row_force_default=False, spacing=10)
+        root = MDNewsMak()
         newslist = self.get_news()
+        numb = 1
         for i in newslist:
-            card = MDCardNews()
-            card.ids.label1.font_size = sp(self.fonter + 2)
+            root.ids.label3.font_size = sp(self.fonter + 2)
             s = str(i[0]) + '\n\n' + str(i[1])
-            card.ids.label1.text = s
-            # card.ids.label1.height = self.texture_size[1] + 2 * self.padding[1]
-            layout.add_widget(card)
+            if numb == 1:
+                root.ids.label1.font_size = sp(self.fonter + 2)
+                root.ids.label1.text = s
+            if numb == 2:
+                root.ids.label2.font_size = sp(self.fonter + 2)
+                root.ids.label2.text = s
+            if numb == 3:
+                root.ids.label3.text = s
+                root.ids.label3.font_size = sp(self.fonter + 2)
+            if numb == 4:
+                root.ids.label4.text = s
+                root.ids.label4.font_size = sp(self.fonter + 2)
+            if numb == 5:
+                root.ids.label5.text = s
+                root.ids.label5.font_size = sp(self.fonter + 2)
+            if numb == 6:
+                root.ids.label6.text = s
+                root.ids.label6.font_size = sp(self.fonter + 2)
+            if numb == 7:
+                root.ids.label7.text = s
+                root.ids.label7.font_size = sp(self.fonter + 2)
+            if numb == 8:
+                root.ids.label8.text = s
+                root.ids.label8.font_size = sp(self.fonter + 2)
+            if numb == 9:
+                root.ids.label9.text = s
+                root.ids.label9.font_size = sp(self.fonter + 2)
+            if numb == 10:
+                root.ids.label10.text = s
+                root.ids.label10.font_size = sp(self.fonter + 2)
 
-        root.add_widget(layout)
+            # card.ids.label1.height = self.texture_size[1] + 2 * self.padding[1]
+            numb += 1
         self.news_up = root
         return root
 
