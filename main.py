@@ -268,71 +268,72 @@ class LoginApp(MDApp):
         root = MDNewsMak()
         newslist = self.get_news()
         numb = 1
-        print(len(newslist))
+        print(newslist)
         self.news_col = len(newslist)
         for i in newslist:
             root.ids.label3.font_size = sp(self.fonter + 2)
             s = str(i[0]) + '\n\n' + str(i[1])
             if numb == 1:
-                if len(newslist) < numb:
-                    break
                 root.ids.label1.font_size = sp(self.fonter + 2)
                 root.ids.label1.text = s
             if numb == 2:
-                if len(newslist) < numb:
-                    break
                 root.ids.label2.font_size = sp(self.fonter + 2)
                 root.ids.label2.text = s
             if numb == 3:
-                if len(newslist) < numb:
-                    break
                 root.ids.label3.text = s
                 root.ids.label3.font_size = sp(self.fonter + 2)
             if numb == 4:
-                if len(newslist) < numb:
-                    break
                 root.ids.label4.text = s
                 root.ids.label4.font_size = sp(self.fonter + 2)
             if numb == 5:
-                if len(newslist) < numb:
-                    break
                 root.ids.label5.text = s
                 root.ids.label5.font_size = sp(self.fonter + 2)
             if numb == 6:
-                if len(newslist) < numb:
-                    break
                 root.ids.label6.text = s
                 root.ids.label6.font_size = sp(self.fonter + 2)
             if numb == 7:
-                if len(newslist) < numb:
-                    break
                 root.ids.label7.text = s
                 root.ids.label7.font_size = sp(self.fonter + 2)
                 root.remove_widget(root.ids.card7)
 
             if numb == 8:
-                if len(newslist) < numb:
-                    break
                 root.ids.label8.text = s
                 root.ids.label8.font_size = sp(self.fonter + 2)
                 root.remove_widget(root.ids.card8)
 
             if numb == 9:
-                if len(newslist) < numb:
-                    break
                 root.ids.label9.text = s
                 root.ids.label9.font_size = sp(self.fonter + 2)
                 root.remove_widget(root.ids.card9)
 
             if numb == 10:
-                if len(newslist) < numb:
-                    break
                 root.ids.label10.text = s
                 root.ids.label10.font_size = sp(self.fonter + 2)
                 root.ids.newsmaketlayout.remove_widget(root.ids.card10)
 
             # card.ids.label1.height = self.texture_size[1] + 2 * self.padding[1]
             numb += 1
+        for i in range(len(newslist) + 1, 11):
+            if i == 1:
+                root.ids.card1.size_hint = (1, 0)
+            if i == 2:
+                root.ids.card2.size_hint = (1, 0)
+            if i == 3:
+                root.ids.card3.size_hint = (1, 0)
+            if i == 4:
+                root.ids.card4.size_hint = (1, 0)
+            if i == 5:
+                root.ids.card5.size_hint = (1, 0)
+            if i == 6:
+                root.ids.card6.size_hint = (1, 0)
+            if i == 7:
+                root.ids.card7.size_hint = (1, 0)
+            if i == 8:
+                root.ids.card8.size_hint = (1, 0)
+            if i == 9:
+                root.ids.card9.size_hint = (1, 0)
+            if i == 10:
+                root.ids.card10.size_hint = (1, 0)
         self.news_up = root
         return root
 
