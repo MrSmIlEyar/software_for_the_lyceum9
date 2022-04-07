@@ -390,20 +390,23 @@ class LoginApp(MDApp):
         sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2))
 
     def getfontbut(self):
-        self.fonter = int(sm.screens[2].ids.getfont.text)
-        with open('resources/check.txt') as f:
-            b = f.read()
-            a = b.split(",")
-            a[-1] = str(self.fonter)
-            s = ",".join(a)
-            print(s)
-        with open('resources/check.txt', 'w') as f:
-            f.write(f'{s}')
-        sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
-        sm.screens[2].ids.schnav.remove_widget(self.sch[0])
-        sm.screens[2].ids.schnav.remove_widget(self.daylabel)
-        sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
-        sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+        if str(sm.screens[2].ids.getfont.text).isdigit():
+            self.fonter = int(sm.screens[2].ids.getfont.text)
+            with open('resources/check.txt') as f:
+                b = f.read()
+                a = b.split(",")
+                a[-1] = str(self.fonter)
+                s = ",".join(a)
+                print(s)
+            with open('resources/check.txt', 'w') as f:
+                f.write(f'{s}')
+            sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
+            sm.screens[2].ids.schnav.remove_widget(self.sch[0])
+            sm.screens[2].ids.schnav.remove_widget(self.daylabel)
+            sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
+            sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+        else:
+            sm.screens[2].ids.getfont.text = str(self.fonter)
 
     def exits(self):
         LoginApp().stop()
