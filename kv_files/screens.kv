@@ -367,6 +367,7 @@
                 size_hint: 1, None
                 # size: 280, 200
                 height: label1.height
+                id: card1
                 MDLabel:
                     id: label1
                     markup: True
@@ -381,6 +382,7 @@
                 size_hint: 1, None
                 # size: 280, 200
                 height: label2.height
+                id: card2
                 MDLabel:
                     id: label2
                     markup: True
@@ -394,6 +396,7 @@
                 size_hint: 1, None
                 # size: 280, 200
                 height: label3.height
+                id: card3
                 MDLabel:
                     id: label3
                     markup: True
@@ -406,7 +409,8 @@
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
-                height: label1.height
+                height: label4.height
+                id: card4
                 MDLabel:
                     id: label4
                     markup: True
@@ -419,7 +423,8 @@
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
-                height: label1.height
+                height: label5.height
+                id: card5
                 MDLabel:
                     id: label5
                     markup: True
@@ -432,7 +437,8 @@
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
-                height: label1.height
+                height: label6.height
+                id: card6
                 MDLabel:
                     id: label6
                     markup: True
@@ -445,7 +451,8 @@
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
-                height: label1.height
+                height: label7.height
+                id: card7
                 MDLabel:
                     id: label7
                     markup: True
@@ -458,7 +465,8 @@
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
-                height: label1.height
+                height: label8.height
+                id: card8
                 MDLabel:
                     id: label8
                     markup: True
@@ -471,7 +479,8 @@
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
-                height: label1.height
+                height: label9.height
+                id: card9
                 MDLabel:
                     id: label9
                     markup: True
@@ -480,7 +489,20 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
-
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label10.height
+                id: card10
+                MDLabel:
+                    id: label10
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
 
 
 

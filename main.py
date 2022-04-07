@@ -150,6 +150,29 @@ class LoginApp(MDApp):
             requests.patch(url=self.url, json=to_database)
             self.userclass = sclass
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+            # numb = 1
+            # for i in range(1, 11):
+            #     if i == 1 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card1)
+            #     if i == 2 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card2)
+            #     if i == 3 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card3)
+            #     if i == 4 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card4)
+            #     if i == 5 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card5)
+            #     if i == 6 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card6)
+            #     if i == 7 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card7)
+            #     if i == 8 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card8)
+            #     if i == 9 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card9)
+            #     if i == 10 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card10)
+
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
             sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             sm.get_screen('app').manager.current = 'app'
@@ -193,6 +216,27 @@ class LoginApp(MDApp):
                     f.write(p)
                     sm.get_screen('app').manager.current = 'app'
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+            # for i in range(1, 11):
+            #     if i == 1 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsmaketlayout.remove_widget(sm.get_screen('app').ids.card1)
+            #     if i == 2 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsmaketlayout.remove_widget(sm.get_screen('app').ids.card2)
+            #     if i == 3 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsmaketlayout.remove_widget(sm.get_screen('app').ids.card3)
+            #     if i == 4 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsmaketlayout.remove_widget(sm.get_screen('app').ids.card4)
+            #     if i == 5 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsmaketlayout.remove_widget(sm.get_screen('app').ids.card5)
+            #     if i == 6 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsmaketlayout.remove_widget(sm.get_screen('app').ids.card6)
+            #     if i == 7 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card7)
+            #     if i == 8 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card8)
+            #     if i == 9 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card9)
+            #     if i == 10 and self.news_col < i:
+            #         sm.get_screen('app').ids.newsnav.remove_widget(sm.get_screen('app').ids.card10)
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
             sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             return sm.screens[2]
@@ -224,39 +268,68 @@ class LoginApp(MDApp):
         root = MDNewsMak()
         newslist = self.get_news()
         numb = 1
+        print(len(newslist))
+        self.news_col = len(newslist)
         for i in newslist:
             root.ids.label3.font_size = sp(self.fonter + 2)
             s = str(i[0]) + '\n\n' + str(i[1])
             if numb == 1:
+                if len(newslist) < numb:
+                    break
                 root.ids.label1.font_size = sp(self.fonter + 2)
                 root.ids.label1.text = s
             if numb == 2:
+                if len(newslist) < numb:
+                    break
                 root.ids.label2.font_size = sp(self.fonter + 2)
                 root.ids.label2.text = s
             if numb == 3:
+                if len(newslist) < numb:
+                    break
                 root.ids.label3.text = s
                 root.ids.label3.font_size = sp(self.fonter + 2)
             if numb == 4:
+                if len(newslist) < numb:
+                    break
                 root.ids.label4.text = s
                 root.ids.label4.font_size = sp(self.fonter + 2)
             if numb == 5:
+                if len(newslist) < numb:
+                    break
                 root.ids.label5.text = s
                 root.ids.label5.font_size = sp(self.fonter + 2)
             if numb == 6:
+                if len(newslist) < numb:
+                    break
                 root.ids.label6.text = s
                 root.ids.label6.font_size = sp(self.fonter + 2)
             if numb == 7:
+                if len(newslist) < numb:
+                    break
                 root.ids.label7.text = s
                 root.ids.label7.font_size = sp(self.fonter + 2)
+                root.remove_widget(root.ids.card7)
+
             if numb == 8:
+                if len(newslist) < numb:
+                    break
                 root.ids.label8.text = s
                 root.ids.label8.font_size = sp(self.fonter + 2)
+                root.remove_widget(root.ids.card8)
+
             if numb == 9:
+                if len(newslist) < numb:
+                    break
                 root.ids.label9.text = s
                 root.ids.label9.font_size = sp(self.fonter + 2)
+                root.remove_widget(root.ids.card9)
+
             if numb == 10:
+                if len(newslist) < numb:
+                    break
                 root.ids.label10.text = s
                 root.ids.label10.font_size = sp(self.fonter + 2)
+                root.ids.newsmaketlayout.remove_widget(root.ids.card10)
 
             # card.ids.label1.height = self.texture_size[1] + 2 * self.padding[1]
             numb += 1
