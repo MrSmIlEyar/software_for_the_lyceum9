@@ -214,32 +214,111 @@
                 icon: 'calendar-blank-outline'
                 text: 'Расписание'
 
-                MDFloatingActionButton:
-                    pos: (Window.width * 0.857, Window.height / 12)
-                    icon: "arrow-right-thick"
-                    on_press: app.arrow_right()
-                    md_bg_color: [0.5, 0.39, 0.31, 1]
+                MDRoundFlatButton:
+                    text : ' '
+                    pos : (Window.width * 0.5, 0)
 
-                MDFloatingActionButton:
-                    pos: (Window.width * -0.0015, Window.height / 12)
-                    icon: "arrow-left-thick"
-                    on_press: app.arrow_left()
-                    md_bg_color: [0.5, 0.39, 0.31, 1]
+                    size_hint : {0.5 , 1}
+                    font_size : sp(17)
+                    on_release: app.arrow_right()
+                    text_color: [0, 0, 0, 0.8]
+                    line_color: [1, 1, 1, 1]
+                    active_color : [1, 1, 1, 1]
+                    line_width : 0.1
 
-<MDCardNews>
-    MDCard:
-        size_hint: (1, 1)
-        size: (Window.width - Window.width * 0.2, Window.height * 0.3)
-        elevation: 15
-        md_bg_color: [254 / 255, 255 / 255, 255 / 255, 1]
-        padding: 20
-        spacing: 30
-        orientation: "horizontal"
 
-        MDLabel:
-            id: newslabel
-            text: 'NewsLabel'
-            font_size: sp(20)
+                MDRoundFlatButton:
+                    text : ' '
+                    pos_hint: {"top": 0}  # верхняя граница экрана
+                    pos_hint: {"bottom": 1}  # нижняя граница экрана
+                    pos_hint: {"right": 0.5}
+                    pos_hint: {"left": 0}
+
+                    size_hint : {0.5 , 1}
+                    font_size : sp(17)
+                    on_release: app.arrow_left()
+                    text_color: [0, 0, 0, 0.8]
+                    line_color: [1, 1, 1, 1]
+                    active_color : [1, 1, 1, 1]
+                    line_width : 0.1
+
+
+
+            MDBottomNavigationItem:
+                id: settoll
+                name: 'screen 3'
+                icon: 'cog'
+                text: 'Настройки'
+
+                MDCard :
+                    size_hint: None, None
+                    size : sp(320), sp(450)
+                    pos_hint : {"center_x":.5,"center_y":.5}
+                    elevation : 15
+                    md_bg_color : [255/255,255/255,255/255,1]
+                    padding : 20
+                    spacing : 30
+                    orientation : "vertical"
+                    # Adding items to the card
+
+                    MDRoundFlatButton:
+                        text : 'Выйти из аккаунта и \n\t\t приложения'
+                        pos_hint : {"center_x":.5,"center_y":.9}
+                        font_size : sp(30)
+                        on_release: app.exit_acc()
+                        text_color: [0, 0, 0, 0.8]
+                        line_color: [0.5, 0.39, 0.31, 0.5]
+                        line_width : 1.5
+                        font_name: "resources/Vetka.otf"
+
+                    MDRoundFlatButton:
+                        text : 'Выйти из приложения'
+                        pos_hint : {"center_x":.5}
+                        font_size : sp(30)
+                        on_press: app.exits()
+                        text_color: [0, 0, 0, 0.8]
+                        line_color: [0.5, 0.39, 0.31, 0.5]
+                        line_width : 1.5
+                        font_name: "resources/Vetka.otf"
+
+                    MDRoundFlatButton:
+                        text : 'Обновить новости'
+                        pos_hint : {"center_x":.5}
+                        font_size : sp(30)
+                        on_press: app.update_news()
+                        text_color: [0, 0, 0, 0.8]
+                        line_color: [0.5, 0.39, 0.31, 0.5]
+                        line_width : 1.5
+                        font_name: "resources/Vetka.otf"
+                    BoxLayout:
+                        size_hint_y: 1
+                        spacing: sp(40)
+                        MDTextFieldRound :
+                            id: getfont
+                            hint_text : "шрифт"
+                            icon_right : "format-size"
+                            size_hint_x : None
+                            width : sp(150)
+                            font_size : sp(25)
+                            pos_hint : {"center_x":.5}
+                            normal_color : [0.5, 0.39, 0.31, 0.5]
+                            font_name: "resources/Vetka.otf"
+
+                        MDRoundFlatButton:
+                            text : 'ОК'
+                            pos_hint : {"center_x":.5}
+                            font_size : sp(20)
+                            on_press: app.getfontbut()
+                            text_color: [0, 0, 0, 0.8]
+                            line_color: [0.5, 0.39, 0.31, 0.5]
+                            line_width : 1.5
+                            font_name: "resources/Vetka.otf"
+                    Widget :
+                        size_hint_y : 1
+                        height : sp(30)
+
+
+
 
 <MDCardSchNumber>
     MDCard:
@@ -270,3 +349,155 @@
             id: schlessonlabel
             text: 'LessonLabel'
             font_size: sp(18)
+
+
+<MDNewsMak>
+    ScrollView:
+        MDGridLayout:
+            id: newsmaketlayout
+            cols: 1
+            adaptive_height: True
+            padding: '10dp', '15dp'
+            spacing: '15dp'
+
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label1.height
+                id: card1
+                MDLabel:
+                    id: label1
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label2.height
+                id: card2
+                MDLabel:
+                    id: label2
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label3.height
+                id: card3
+                MDLabel:
+                    id: label3
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label4.height
+                id: card4
+                MDLabel:
+                    id: label4
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label5.height
+                id: card5
+                MDLabel:
+                    id: label5
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label6.height
+                id: card6
+                MDLabel:
+                    id: label6
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label7.height
+                id: card7
+                MDLabel:
+                    id: label7
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label8.height
+                id: card8
+                MDLabel:
+                    id: label8
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label9.height
+                id: card9
+                MDLabel:
+                    id: label9
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]
+            MDCard:
+                orientation: 'vertical'
+                size_hint: 1, None
+                # size: 280, 200
+                height: label10.height
+                id: card10
+                MDLabel:
+                    id: label10
+                    markup: True
+                    padding: [15, 15]
+                    text:
+                        '''                        '''
+                    size_hint_y: None
+                    height: self.texture_size[1] + 2 * self.padding[1]

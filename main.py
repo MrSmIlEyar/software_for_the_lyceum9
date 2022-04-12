@@ -5,12 +5,14 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 import json
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.gridlayout import GridLayout
+from kivymd.uix.gridlayout import MDGridLayout
 from kivy.core.window import Window
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.label import MDLabel
 from kivymd.uix.card import MDCard
+from kivymd.uix.boxlayout import MDBoxLayout
 import requests
+import datetime
 
 DAYS = ['Zero', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 TIMES = ['Zero', '8:00 - 8:45', '8:55 - 9:40', '9:50 - 10:35', '10:50 - 11:30', '11:50 - 12:35', '12:45 - 13:30',
@@ -33,11 +35,19 @@ class MDCardNews(MDCard):
     pass
 
 
+class MDEmilNewsCard(MDCard):
+    pass
+
+
 class MDCardSchNumber(MDCard):
     pass
 
 
 class MDCardSchLesson(MDCard):
+    pass
+
+
+class MDNewsMak(ScrollView):
     pass
 
 
@@ -55,7 +65,11 @@ class LoginApp(MDApp):
         self.url = "https://schoolapp-c99c1-default-rtdb.firebaseio.com/.json"
         self.urlnews = "https://schoolapp-67bbd-default-rtdb.europe-west1.firebasedatabase.app/.json"
         self.urlsch = "https://schledulebase-default-rtdb.europe-west1.firebasedatabase.app/.json"
-        sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+        # sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+        request = requests.get(self.urlsch + '?auth=' + self.authsch)
+        self.weekday = datetime.datetime.today().weekday() + 1
+        self.school_data = request.json()
+        self.fonter = 18
         with open('resources/check.txt') as f:
             b = f.read()
             if b == '0':
@@ -132,10 +146,12 @@ class LoginApp(MDApp):
             to_database = json.loads(signup_info)
             print((to_database))
             with open('resources/check.txt', 'w') as f:
-                f.write(f'1,{user},{password}')
+                f.write(f'1,{user},{password},{int(self.fonter)}')
             requests.patch(url=self.url, json=to_database)
             self.userclass = sclass
-            sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, 'day1', 2))
+            sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+            sm.screens[2].ids.getfont.text = str(int(self.fonter))
+            sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             sm.get_screen('app').manager.current = 'app'
 
     auth = 'CSwiRgzsSGde5pwllcXsMzTLuaMxUo5RGafD3I7X'
@@ -153,6 +169,7 @@ class LoginApp(MDApp):
                 b = b.split(',')
                 user = b[1]
                 password = b[2]
+                self.fonter = sp(int(b[3]))
         self.login_check = False
         supported_loginEmail = user.replace('.', '-')
         supported_loginPassword = password.replace('.', '-')
@@ -171,13 +188,13 @@ class LoginApp(MDApp):
                 with open('resources/check.txt', 'w') as f:
                     print(user)
                     print(password)
-                    p = f'1,{user},{password}'
+                    p = f'1,{user},{password},{int(self.fonter)}'
                     print(p)
                     f.write(p)
-
-                    sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, 'day1', 2))
                     sm.get_screen('app').manager.current = 'app'
-            sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, 'day1', 2))
+            sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+            sm.screens[2].ids.getfont.text = str(int(self.fonter))
+            sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             return sm.screens[2]
         else:
             sm.get_screen('menu').ids.status.text = 'Неверный логин или пароль'
@@ -204,48 +221,51 @@ class LoginApp(MDApp):
         return news
 
     def makenews(self):
-        layout = GridLayout(size=(Window.width, Window.height), size_hint_x=None, size_hint_y=None, cols=1,
-                            row_default_height=sp(180), row_force_default=True, spacing=10)
-        layout.bind(minimum_height=layout.setter('height'))
+        root = MDNewsMak()
         newslist = self.get_news()
+        print(newslist)
+        self.news_col = len(newslist)
+        numb = 1
         for i in newslist:
-            card = MDCardNews()
-            s = str(i[0]) + '\n\n' + str(i[1])
-            card.ids.newslabel.text = s
-            layout.add_widget(card)
-        root = ScrollView(size_hint=(None, 1), size=(Window.width, Window.height),
-                          pos_hint={'x': 0.0, 'y': 0.0})
-        root.add_widget(layout)
+            s = f'''[size={int(sp(self.fonter))}][b]{i[0]}[/b]
+{i[1]}'''
+            exec(f"root.ids.label{numb}.text = '''{s}'''")
+            numb += 1
+
+        for i in range(len(newslist) + 1, 11):
+            exec(f"root.ids.card{i}.size_hint = (1, 0)")
+        self.news_up = root
         return root
 
     def get_sch(self, sclass, day):
-        request = requests.get(self.urlsch + '?auth=' + self.authsch)
-        data = request.json()
-        print(data)
+        data = self.school_data
         if sclass in data.keys() and day in data[sclass].keys():
             return data[sclass][day]
         else:
             return ''
 
     def makeschledule(self, sclass, day, screennum):
-        self.daylabel = MDLabel(text=DAYS[int(day[3:])],font_size=sp(53), font_style='Button', pos_hint={'center_y': .95},halign='center')
+        self.daylabel = MDLabel(text=DAYS[int(day[3:])], font_size=sp(53), font_style='Button',
+                                pos_hint={'center_y': .95}, halign='center')
         # pos = (Window.width // 2.3, Window.height / 2.6)
         sm.screens[screennum].ids.schnav.add_widget(self.daylabel)
-        layout = GridLayout(size=(Window.width, Window.height), size_hint_x=1, size_hint_y=None, cols=2,
+        layout = MDGridLayout(size=(Window.width, Window.height), size_hint_x=1, size_hint_y=None, cols=2,
                             row_default_height=sp(90), row_force_default=True, spacing=10)
         layout.bind(minimum_height=layout.setter('height'))
         schlist = self.get_sch(sclass, day).split(':')
         numb = 1
         for i in schlist:
             cardnum = MDCardSchNumber()
+            cardnum.ids.schnumlabel.font_size = sp(self.fonter + 2)
             cardles = MDCardSchLesson()
             cardnum.ids.schnumlabel.text = f'{str(numb)}. {TIMES[numb]}'
+            cardles.ids.schlessonlabel.font_size = sp(self.fonter)
             cardles.ids.schlessonlabel.text = i
             layout.add_widget(cardnum)
             layout.add_widget(cardles)
             numb += 1
         root = ScrollView(size_hint=(0.719, 1), size=(Window.width - Window.width / 3, Window.height),
-                          pos_hint={'center_x': .5,'center_y': .4})
+                          pos_hint={'center_x': .5, 'center_y': .4})
         root.add_widget(layout)
         self.sch = root, day
         return root
@@ -269,6 +289,37 @@ class LoginApp(MDApp):
         sm.screens[2].ids.schnav.remove_widget(self.sch[0])
         sm.screens[2].ids.schnav.remove_widget(self.daylabel)
         sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2))
+
+    def getfontbut(self):
+        if str(sm.screens[2].ids.getfont.text).isdigit():
+            self.fonter = int(sm.screens[2].ids.getfont.text)
+            with open('resources/check.txt') as f:
+                b = f.read()
+                a = b.split(",")
+                a[-1] = str(self.fonter)
+                s = ",".join(a)
+                print(s)
+            with open('resources/check.txt', 'w') as f:
+                f.write(f'{s}')
+            sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
+            sm.screens[2].ids.schnav.remove_widget(self.sch[0])
+            sm.screens[2].ids.schnav.remove_widget(self.daylabel)
+            sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
+            sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+        else:
+            sm.screens[2].ids.getfont.text = str(self.fonter)
+
+    def exits(self):
+        LoginApp().stop()
+
+    def exit_acc(self):
+        with open('resources/check.txt', 'w') as f:
+            f.write("0")
+        LoginApp().stop()
+
+    def update_news(self):
+        sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
+        sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
 
 
 LoginApp().run()
