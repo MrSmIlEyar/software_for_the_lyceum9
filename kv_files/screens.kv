@@ -214,17 +214,35 @@
                 icon: 'calendar-blank-outline'
                 text: 'Расписание'
 
-                MDFloatingActionButton:
-                    pos: (Window.width * 0.857, Window.height / 12)
-                    icon: "arrow-right-thick"
-                    on_press: app.arrow_right()
-                    md_bg_color: [0.5, 0.39, 0.31, 1]
+                MDRoundFlatButton:
+                    text : ' '
+                    pos : (Window.width * 0.5, 0)
 
-                MDFloatingActionButton:
-                    pos: (Window.width * -0.0015, Window.height / 12)
-                    icon: "arrow-left-thick"
-                    on_press: app.arrow_left()
-                    md_bg_color: [0.5, 0.39, 0.31, 1]
+                    size_hint : {0.5 , 1}
+                    font_size : sp(17)
+                    on_release: app.arrow_right()
+                    text_color: [0, 0, 0, 0.8]
+                    line_color: [1, 1, 1, 1]
+                    active_color : [1, 1, 1, 1]
+                    line_width : 0.1
+
+
+                MDRoundFlatButton:
+                    text : ' '
+                    pos_hint: {"top": 0}  # верхняя граница экрана
+                    pos_hint: {"bottom": 1}  # нижняя граница экрана
+                    pos_hint: {"right": 0.5}
+                    pos_hint: {"left": 0}
+
+                    size_hint : {0.5 , 1}
+                    font_size : sp(17)
+                    on_release: app.arrow_left()
+                    text_color: [0, 0, 0, 0.8]
+                    line_color: [1, 1, 1, 1]
+                    active_color : [1, 1, 1, 1]
+                    line_width : 0.1
+
+
 
             MDBottomNavigationItem:
                 id: settoll
