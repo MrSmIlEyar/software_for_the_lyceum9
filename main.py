@@ -17,6 +17,8 @@ import datetime
 DAYS = ['Zero', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 TIMES = ['Zero', '8:00 - 8:45', '8:55 - 9:40', '9:50 - 10:35', '10:50 - 11:30', '11:50 - 12:35', '12:45 - 13:30',
          '13:35 - 14:25', '14:30 - 15:20']
+TIMES_SATURDAY = ['Zero', '8:00 - 8:40', '8:45 - 9:25', '9:30 - 10:10', '10:20 - 11:00', '11:10 - 11:50', '12:00 - 12:40',
+         '12:45 - 13:25']
 
 
 class LoginScreen(Screen):
@@ -258,7 +260,10 @@ class LoginApp(MDApp):
             cardnum = MDCardSchNumber()
             cardnum.ids.schnumlabel.font_size = sp(self.fonter + 2)
             cardles = MDCardSchLesson()
-            cardnum.ids.schnumlabel.text = f'{str(numb)}. {TIMES[numb]}'
+            if day != 'day6':
+                cardnum.ids.schnumlabel.text = f'{str(numb)}. {TIMES[numb]}'
+            else:
+                cardnum.ids.schnumlabel.text = f'{str(numb)}. {TIMES_SATURDAY[numb]}'
             cardles.ids.schlessonlabel.font_size = sp(self.fonter)
             cardles.ids.schlessonlabel.text = i
             layout.add_widget(cardnum)
