@@ -171,7 +171,7 @@ class LoginApp(MDApp):
                 b = b.split(',')
                 user = b[1]
                 password = b[2]
-                self.fonter = sp(int(b[3]))
+                self.fonter = int(b[3])
         self.login_check = False
         supported_loginEmail = user.replace('.', '-')
         supported_loginPassword = password.replace('.', '-')
