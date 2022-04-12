@@ -299,27 +299,7 @@
                         size_hint_y : 1
                         height : sp(30)
 
-<MDCardNews>
-    MDCard:
-        orientation: 'vertical'
-        size_hint: 1, None
-        # size: 280, 200
-        height: self.minimum_height
-        MDLabel:
-            id: label1
-            markup: True
-            padding: [15, 15]
-            text:
-                '''
-                [size=25][b]Ford[/b][/size]
-                If mdlabel text becomes too many to fit into the specified mdcard size,\n
-                the text overslaps other things closeby..\n
-                So my question: How do I set MDCard height to automatically\n
-                adjusts accordingly to the height/size of widgets inside of it.\n
-                Thanks in Advance!!
-                '''
-            size_hint_y: None
-            height: self.texture_size[1] + 2*self.padding[1]
+
 
 
 <MDCardSchNumber>
@@ -503,30 +483,3 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
-
-
-
-
-
-<MDEmilNewsCard>
-    MDCard:
-        orientation: 'vertical'
-        size_hint: 1, None
-        # size: 280, 200
-        height: label3.height
-        MDLabel:
-            id: label3
-            markup: True
-            padding: [15, 15]
-            text:
-                '''
-                [size=25][b]Ford[/b][/size]
-                "Русский поэт, драматург и прозаик, заложивший основы русского реалистического направления,      z",\n
-                литературный критик и теоретик литературы, историк, публицист, журналист;\n
-                один из самых авторитетных литературных деятелей первой трети XIX века.\n
-                Русский поэт, драматург и прозаик, заложивший основы русского реалистического направления,\n
-                литературный критик и теоретик литературы, историк, публицист, журналист;\n
-                Thanks in Advance!!
-                '''
-            size_hint_y: None
-            height: self.texture_size[1] + 2 * self.padding[1]
