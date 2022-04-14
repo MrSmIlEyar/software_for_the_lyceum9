@@ -37,7 +37,7 @@
             MDTextFieldRound :
                 id: getparol
                 hint_text : "пароль"
-                icon_right : "eye-off"
+                icon_right : "key-variant"
                 size_hint_x : None
                 width : sp(220)
                 font_size : sp(25)
@@ -114,7 +114,7 @@
             MDTextFieldRound :
                 id: getpassword1
                 hint_text : "пароль"
-                icon_right : "eye-off"
+                icon_right : "key-variant"
                 size_hint_x : None
                 width : sp(220)
                 font_size : sp(20)
@@ -259,7 +259,7 @@
                     elevation : 15
                     md_bg_color : [255/255,255/255,255/255,1]
                     padding : 20
-                    spacing : 30
+                    spacing : 10
                     orientation : "vertical"
                     # Adding items to the card
 
@@ -292,29 +292,42 @@
                         line_color: [0.5, 0.39, 0.31, 0.5]
                         line_width : 1.5
                         font_name: "resources/Vetka.otf"
+
                     BoxLayout:
                         size_hint_y: 1
-                        spacing: sp(40)
+                        spacing: sp(25)
+                        pos_hint: {'center': .6}
+
+                        MDLabel:
+                            width: sp(3)
+                            font_size: sp(3)
+                            text: ''
+
                         MDTextFieldRound :
                             id: getfont
                             hint_text : "шрифт"
                             icon_right : "format-size"
                             size_hint_x : None
-                            width : sp(150)
+                            width : sp(75)
                             font_size : sp(25)
-                            pos_hint : {"center_x":.5}
+                            pos_hint : {"center_x":.9}
                             normal_color : [0.5, 0.39, 0.31, 0.5]
                             font_name: "resources/Vetka.otf"
 
                         MDRoundFlatButton:
                             text : 'ОК'
                             pos_hint : {"center_x":.5}
-                            font_size : sp(20)
+                            font_size : sp(18)
                             on_press: app.getfontbut()
                             text_color: [0, 0, 0, 0.8]
                             line_color: [0.5, 0.39, 0.31, 0.5]
                             line_width : 1.5
                             font_name: "resources/Vetka.otf"
+
+                        MDLabel:
+                            width: sp(3)
+                            font_size: sp(3)
+                            text: ''
                     Widget :
                         size_hint_y : 1
                         height : sp(30)
@@ -503,3 +516,38 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+
+
+<MDEmilNewsCard>
+    MDCard:
+        orientation: 'vertical'
+        size_hint: 1, 1
+
+        MDTextFieldRound :
+            id: get_zag
+            hint_text : "Заголовок"
+            size_hint :  (0.8, None)
+            width : Window.width * 0.1
+            font_size : sp(18)
+            pos_hint : {"center_x":.5, "center_y":.8}
+
+            normal_color : [0.5, 0.39, 0.31, 0.5]
+        MDTextField:
+            multiline: True
+            id: get_text
+            hint_text : "Текст Новости"
+            size_hint :  (0.8, 0.65)
+            width : Window.width * 0.1
+            font_size : sp(25)
+            pos_hint : {"center_x":.5, "center_y":.78}
+
+            normal_color : [0.5, 0.39, 0.31, 0.5]
+        MDRoundFlatButton:
+            text : 'Сохранить'
+            pos_hint : {"center_x":.5}
+            font_size : sp(18)
+            on_press: app.get_upgrade_news()
+            text_color: [0, 0, 0, 0.8]
+            line_color: [0.5, 0.39, 0.31, 0.5]
+            line_width : 1.5
+            font_name: "resources/Vetka.otf"

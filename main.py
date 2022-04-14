@@ -10,13 +10,14 @@ from kivy.core.window import Window
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.label import MDLabel
 from kivymd.uix.card import MDCard
-from kivymd.uix.boxlayout import MDBoxLayout
 import requests
 import datetime
 
 DAYS = ['Zero', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 TIMES = ['Zero', '8:00 - 8:45', '8:55 - 9:40', '9:50 - 10:35', '10:50 - 11:30', '11:50 - 12:35', '12:45 - 13:30',
          '13:35 - 14:25', '14:30 - 15:20']
+TIMES_SATURDAY = ['Zero', '8:00 - 8:40', '8:45 - 9:25', '9:30 - 10:10', '10:20 - 11:00', '11:10 - 11:50', '12:00 - 12:40',
+         '12:45 - 13:25']
 seckey = "6061799"
 
 
@@ -71,7 +72,7 @@ class LoginApp(MDApp):
         self.weekday = datetime.datetime.today().weekday() + 1
         self.school_data = request.json()
         self.fonter = 18
-        with open('resources/check.txt') as f:
+        with open('resources/check.txt', encoding="utf-8") as f:
             b = f.read()
             if b == '0':
                 return sm
@@ -147,7 +148,7 @@ class LoginApp(MDApp):
             signup_info = signup_info.replace("\'", "")
             to_database = json.loads(signup_info)
             print((to_database))
-            with open('resources/check.txt', 'w') as f:
+            with open('resources/check.txt', 'w', encoding="utf-8") as f:
                 f.write(f'1,{user},{password},{int(self.fonter)}')
             requests.patch(url=self.url, json=to_database)
             self.userclass = sclass
@@ -164,7 +165,7 @@ class LoginApp(MDApp):
     authsch = 'QWuupfhceIGKPCNtv1CDPJacm6gBrATkdmQ5UbNk'
 
     def login(self):
-        with open('resources/check.txt') as f:
+        with open('resources/check.txt', encoding="utf-8") as f:
             b = f.read()
             if b[0] == '0':
                 user = sm.get_screen('menu').ids.getusername.text
@@ -174,7 +175,7 @@ class LoginApp(MDApp):
                 b = b.split(',')
                 user = b[1]
                 password = b[2]
-                self.fonter = sp(int(b[3]))
+                self.fonter = int(b[3])
         self.login_check = False
         supported_loginEmail = user.replace('.', '-')
         supported_loginPassword = password.replace('.', '-')
@@ -190,7 +191,7 @@ class LoginApp(MDApp):
             print(self.userclass)
             self.login_check = True
             if b[0] == '0':
-                with open('resources/check.txt', 'w') as f:
+                with open('resources/check.txt', 'w', encoding="utf-8") as f:
                     print(user)
                     print(password)
                     p = f'1,{user},{password},{int(self.fonter)}'
@@ -225,6 +226,8 @@ class LoginApp(MDApp):
         data = request.json()
         news = []
         for key, value in data.items():
+            key = key.replace("$", ".")
+            value = value.replace("$", ".")
             news.append([key, value])
         return news
 
@@ -266,7 +269,10 @@ class LoginApp(MDApp):
             cardnum = MDCardSchNumber()
             cardnum.ids.schnumlabel.font_size = sp(self.fonter + 2)
             cardles = MDCardSchLesson()
-            cardnum.ids.schnumlabel.text = f'{str(numb)}. {TIMES[numb]}'
+            if day != 'day6':
+                cardnum.ids.schnumlabel.text = f'{str(numb)}. {TIMES[numb]}'
+            else:
+                cardnum.ids.schnumlabel.text = f'{str(numb)}. {TIMES_SATURDAY[numb]}'
             cardles.ids.schlessonlabel.font_size = sp(self.fonter)
             cardles.ids.schlessonlabel.text = i
             layout.add_widget(cardnum)
@@ -301,13 +307,13 @@ class LoginApp(MDApp):
     def getfontbut(self):
         if str(sm.screens[2].ids.getfont.text).isdigit():
             self.fonter = int(sm.screens[2].ids.getfont.text)
-            with open('resources/check.txt') as f:
+            with open('resources/check.txt', encoding="utf-8") as f:
                 b = f.read()
                 a = b.split(",")
                 a[-1] = str(self.fonter)
                 s = ",".join(a)
                 print(s)
-            with open('resources/check.txt', 'w') as f:
+            with open('resources/check.txt', 'w', encoding="utf-8") as f:
                 f.write(f'{s}')
             sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
             sm.screens[2].ids.schnav.remove_widget(self.sch[0])
@@ -321,7 +327,7 @@ class LoginApp(MDApp):
         LoginApp().stop()
 
     def exit_acc(self):
-        with open('resources/check.txt', 'w') as f:
+        with open('resources/check.txt', 'w', encoding="utf-8") as f:
             f.write("0")
         LoginApp().stop()
 
@@ -331,8 +337,25 @@ class LoginApp(MDApp):
 
 
     def upgrade_news(self):
-        sm.screens[2].ids.rb.size_hint = (0, 0)
-        sm.screens[2].ids.lb.size_hint = (0, 0)
+        sm.screens[2].ids.rb.size_hint = (0.00001, 0.00001)
+        sm.screens[2].ids.lb.size_hint = (0.00001, 0.000001)
+        sm.screens[2].ids.schnav.text = "Добавить Новость"
+        self.cardnews = MDEmilNewsCard()
+        sm.screens[2].ids.schnav.add_widget(self.cardnews)
+
+    def get_upgrade_news(self):
+        zagolovok = self.cardnews.ids.get_zag.text
+        text_news = self.cardnews.ids.get_text.text
+        print(zagolovok, text_news)
+        signup_info = str({
+            f'"{zagolovok}":"{text_news}"'})
+        signup_info = signup_info.replace(".", "$")
+        signup_info = signup_info.replace("\'", "")
+        to_database = json.loads(signup_info)
+        requests.patch(url=self.urlnews, json=to_database)
+        self.update_news()
+
+
 
 
 LoginApp().run()
