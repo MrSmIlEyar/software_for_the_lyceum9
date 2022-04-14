@@ -17,6 +17,7 @@ import datetime
 DAYS = ['Zero', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 TIMES = ['Zero', '8:00 - 8:45', '8:55 - 9:40', '9:50 - 10:35', '10:50 - 11:30', '11:50 - 12:35', '12:45 - 13:30',
          '13:35 - 14:25', '14:30 - 15:20']
+seckey = "6061799"
 
 
 class LoginScreen(Screen):
@@ -113,30 +114,31 @@ class LoginApp(MDApp):
                                    size_hint=(0.7, 0.2),
                                    buttons=[cancel_btn_username_dialogue])
             self.dialog.open()
-        elif not (bukv.isalpha() and nomer.isdigit()):
-            cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
-            self.dialog = MDDialog(title='Ошибка класса', text='Неверный формат, введите правильное значение',
-                                   size_hint=(0.7, 0.2),
-                                   buttons=[cancel_btn_username_dialogue])
-            self.dialog.open()
-        elif not 1 <= int(nomer) < 12:
-            cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
-            self.dialog = MDDialog(title='Ошибка класса', text='Неверный диапазон',
-                                   size_hint=(0.7, 0.2),
-                                   buttons=[cancel_btn_username_dialogue])
-            self.dialog.open()
-        elif not bukv.lower() in "абвгдклмно":
-            cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
-            self.dialog = MDDialog(title='Ошибка класса', text='Неверная буква класса',
-                                   size_hint=(0.7, 0.2),
-                                   buttons=[cancel_btn_username_dialogue])
-            self.dialog.open()
-        elif not (10 <= int(nomer) < 12 and bukv.lower() in "аб"):
-            cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
-            self.dialog = MDDialog(title='Ошибка класса', text='После 9ого класса нет таких букв',
-                                   size_hint=(0.7, 0.2),
-                                   buttons=[cancel_btn_username_dialogue])
-            self.dialog.open()
+        elif sclass != "6061799":
+            if not (bukv.isalpha() and nomer.isdigit()):
+                cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
+                self.dialog = MDDialog(title='Ошибка класса', text='Неверный формат, введите правильное значение',
+                                       size_hint=(0.7, 0.2),
+                                       buttons=[cancel_btn_username_dialogue])
+                self.dialog.open()
+            elif not 1 <= int(nomer) < 12:
+                cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
+                self.dialog = MDDialog(title='Ошибка класса', text='Неверный диапазон',
+                                       size_hint=(0.7, 0.2),
+                                       buttons=[cancel_btn_username_dialogue])
+                self.dialog.open()
+            elif not bukv.lower() in "абвгдклмно":
+                cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
+                self.dialog = MDDialog(title='Ошибка класса', text='Неверная буква класса',
+                                       size_hint=(0.7, 0.2),
+                                       buttons=[cancel_btn_username_dialogue])
+                self.dialog.open()
+            elif not (10 <= int(nomer) < 12 and bukv.lower() in "аб"):
+                cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
+                self.dialog = MDDialog(title='Ошибка класса', text='После 9ого класса нет таких букв',
+                                       size_hint=(0.7, 0.2),
+                                       buttons=[cancel_btn_username_dialogue])
+                self.dialog.open()
         else:
             print(user, password1)
             signup_info = str({
@@ -151,7 +153,10 @@ class LoginApp(MDApp):
             self.userclass = sclass
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
-            sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
+            if sclass == "6061799":
+                self.upgrade_news()
+            else:
+                sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             sm.get_screen('app').manager.current = 'app'
 
     auth = 'CSwiRgzsSGde5pwllcXsMzTLuaMxUo5RGafD3I7X'
@@ -194,7 +199,10 @@ class LoginApp(MDApp):
                     sm.get_screen('app').manager.current = 'app'
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
-            sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
+            if self.userclass == "6061799":
+                self.upgrade_news()
+            else:
+                sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             return sm.screens[2]
         else:
             sm.get_screen('menu').ids.status.text = 'Неверный логин или пароль'
@@ -250,7 +258,7 @@ class LoginApp(MDApp):
         # pos = (Window.width // 2.3, Window.height / 2.6)
         sm.screens[screennum].ids.schnav.add_widget(self.daylabel)
         layout = MDGridLayout(size=(Window.width, Window.height), size_hint_x=1, size_hint_y=None, cols=2,
-                            row_default_height=sp(90), row_force_default=True, spacing=10)
+                              row_default_height=sp(90), row_force_default=True, spacing=10)
         layout.bind(minimum_height=layout.setter('height'))
         schlist = self.get_sch(sclass, day).split(':')
         numb = 1
@@ -320,6 +328,11 @@ class LoginApp(MDApp):
     def update_news(self):
         sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
         sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+
+
+    def upgrade_news(self):
+        sm.screens[2].ids.rb.size_hint = (0, 0)
+        sm.screens[2].ids.lb.size_hint = (0, 0)
 
 
 LoginApp().run()
