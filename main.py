@@ -64,14 +64,20 @@ class LoginApp(MDApp):
         sm.add_widget(LoginScreen(name='menu'))
         sm.add_widget(RegistrationScreen(name='registration'))
         sm.add_widget(MainScreen(name='app'))
-        self.url = "https://schoolapp-c99c1-default-rtdb.firebaseio.com/.json"
-        self.urlnews = "https://schoolapp-67bbd-default-rtdb.europe-west1.firebasedatabase.app/.json"
-        self.urlsch = "https://schledulebase-default-rtdb.europe-west1.firebasedatabase.app/.json"
         # sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+        with open('resources/bd_date.txt', encoding="utf-8") as f:
+            b = f.readlines()
+            self.url = b[0][:-1]
+            self.urlnews = b[1][:-1]
+            self.urlsch = b[2][:-1]
+            self.auth = b[3][:-1]
+            self.authnews = b[4][:-1]
+            self.authsch = b[5][:-1]
         request = requests.get(self.urlsch + '?auth=' + self.authsch)
         self.weekday = datetime.datetime.today().weekday() + 1
         self.school_data = request.json()
         self.fonter = 18
+
         with open('resources/check.txt', encoding="utf-8") as f:
             b = f.read()
             if b == '0':
@@ -160,9 +166,6 @@ class LoginApp(MDApp):
                 sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             sm.get_screen('app').manager.current = 'app'
 
-    auth = 'CSwiRgzsSGde5pwllcXsMzTLuaMxUo5RGafD3I7X'
-    authnews = 'Z7raPCgw3vNrXBsMADBfo8hXSWZ4mitTU7STz9M9'
-    authsch = 'QWuupfhceIGKPCNtv1CDPJacm6gBrATkdmQ5UbNk'
 
     def login(self):
         with open('resources/check.txt', encoding="utf-8") as f:
@@ -227,8 +230,10 @@ class LoginApp(MDApp):
         news = []
         for key, value in data.items():
             key = key.replace("$", ".")
+            key = key.replace("PROCENT", "%")
             value = value.replace("$", ".")
             news.append([key, value])
+        self.news_data = news, data
         return news
 
     def makenews(self):
@@ -351,9 +356,40 @@ class LoginApp(MDApp):
             f'"{zagolovok}":"{text_news}"'})
         signup_info = signup_info.replace(".", "$")
         signup_info = signup_info.replace("\'", "")
+        signup_info = signup_info.replace("%", "PROCENT")
         to_database = json.loads(signup_info)
         requests.patch(url=self.urlnews, json=to_database)
         self.update_news()
+
+
+    def delite_news(self, nomber):
+        self.nomber = nomber
+        cancel_btn_username_dialogue_yes = MDFlatButton(text='Да', on_release=self.delite_news_1)
+        cancel_btn_username_dialogue = MDFlatButton(text='Нет', on_release=self.close_username_dialog)
+
+        self.dialog = MDDialog(title='Удалить новость', text='Вы уверены?',
+                               size_hint=(0.7, 0.2),
+                               buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
+        self.dialog.open()
+
+
+
+    def delite_news_1(self, inst):
+
+        nomber = self.nomber
+        print(self.news_data[0][nomber - 1][0])
+        s = self.news_data[0][nomber - 1][0]
+        s = s.replace("%", "PROCENT")
+        s = s.replace("\'", "")
+        s = s.replace(".", "$")
+        s = s.replace(" ", "%20")
+
+        print(f"{self.urlnews[:-5] + s + '.json' + '?auth=' + self.authnews}")
+        response = requests.delete(f"{self.urlnews[:-5] + s + '.json' + '?auth=' + self.authnews}")
+        print(response.json())
+
+        self.update_news()
+        self.dialog.dismiss()
 
 
 

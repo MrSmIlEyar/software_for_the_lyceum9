@@ -375,12 +375,14 @@
             padding: '10dp', '15dp'
             spacing: '15dp'
 
+
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
                 height: label1.height
                 id: card1
+                on_release: app.delite_news(1)
                 MDLabel:
                     id: label1
                     markup: True
@@ -396,6 +398,7 @@
                 # size: 280, 200
                 height: label2.height
                 id: card2
+                on_release: app.delite_news(2)
                 MDLabel:
                     id: label2
                     markup: True
@@ -410,6 +413,7 @@
                 # size: 280, 200
                 height: label3.height
                 id: card3
+                on_release: app.delite_news(3)
                 MDLabel:
                     id: label3
                     markup: True
@@ -424,6 +428,7 @@
                 # size: 280, 200
                 height: label4.height
                 id: card4
+                on_release: app.delite_news(4)
                 MDLabel:
                     id: label4
                     markup: True
@@ -438,6 +443,7 @@
                 # size: 280, 200
                 height: label5.height
                 id: card5
+                on_release: app.delite_news(5)
                 MDLabel:
                     id: label5
                     markup: True
@@ -452,6 +458,7 @@
                 # size: 280, 200
                 height: label6.height
                 id: card6
+                on_release: app.delite_news(6)
                 MDLabel:
                     id: label6
                     markup: True
@@ -466,6 +473,7 @@
                 # size: 280, 200
                 height: label7.height
                 id: card7
+                on_release: app.delite_news(7)
                 MDLabel:
                     id: label7
                     markup: True
@@ -480,6 +488,7 @@
                 # size: 280, 200
                 height: label8.height
                 id: card8
+                on_release: app.delite_news(8)
                 MDLabel:
                     id: label8
                     markup: True
@@ -494,6 +503,7 @@
                 # size: 280, 200
                 height: label9.height
                 id: card9
+                on_release: app.delite_news(9)
                 MDLabel:
                     id: label9
                     markup: True
@@ -508,6 +518,7 @@
                 # size: 280, 200
                 height: label10.height
                 id: card10
+                on_release: app.delite_news(10)
                 MDLabel:
                     id: label10
                     markup: True
@@ -540,6 +551,8 @@
             width : Window.width * 0.1
             font_size : sp(25)
             pos_hint : {"center_x":.5, "center_y":.78}
+            text_color: [0, 0, 0, 0.8]
+
 
             normal_color : [0.5, 0.39, 0.31, 0.5]
         MDRoundFlatButton:
@@ -551,3 +564,4 @@
             line_color: [0.5, 0.39, 0.31, 0.5]
             line_width : 1.5
             font_name: "resources/Vetka.otf"
+
