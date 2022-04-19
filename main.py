@@ -74,6 +74,7 @@ class LoginApp(MDApp):
             self.authnews = b[4][:-1]
             self.authsch = b[5][:-1]
         request = requests.get(self.urlsch + '?auth=' + self.authsch)
+        print(self.urlsch + '?auth=' + self.authsch)
         self.weekday = datetime.datetime.today().weekday() + 1
         self.school_data = request.json()
         self.fonter = 18
@@ -97,6 +98,7 @@ class LoginApp(MDApp):
             a = '1000000000000000'
         bukv = a[-1]
         nomer = a[:-1]
+        print(bukv, nomer)
         request = requests.get(self.url + '?auth=' + self.auth)
         data = request.json()
         supported_loginEmail = user.replace('.', '-')
@@ -146,8 +148,29 @@ class LoginApp(MDApp):
                                        size_hint=(0.7, 0.2),
                                        buttons=[cancel_btn_username_dialogue])
                 self.dialog.open()
+            else:
+                print(user, password1)
+                self.username = user
+                signup_info = str({
+                    f'"{user}":{{"Password":"{password}","Username":"{user}","Name":"{name}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{sclass}"}}'})
+                signup_info = signup_info.replace(".", "-")
+                signup_info = signup_info.replace("\'", "")
+                to_database = json.loads(signup_info)
+                print((to_database))
+                with open('resources/check.txt', 'w', encoding="utf-8") as f:
+                    f.write(f'1,{user},{password},{int(self.fonter)}')
+                requests.patch(url=self.url, json=to_database)
+                self.userclass = sclass
+                sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+                sm.screens[2].ids.getfont.text = str(int(self.fonter))
+                if sclass == seckey:
+                    self.upgrade_news()
+                else:
+                    sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
+                sm.get_screen('app').manager.current = 'app'
         else:
             print(user, password1)
+            self.password = password
             signup_info = str({
                 f'"{user}":{{"Password":"{password}","Username":"{user}","Name":"{name}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{sclass}"}}'})
             signup_info = signup_info.replace(".", "-")
@@ -191,6 +214,7 @@ class LoginApp(MDApp):
         if supported_loginEmail in emails and supported_loginPassword == data[supported_loginEmail]['Password']:
             self.username = data[supported_loginEmail]['Username']
             self.userclass = data[self.username]['Class']
+            self.password = supported_loginPassword
             print(self.userclass)
             self.login_check = True
             if b[0] == '0':
@@ -363,14 +387,15 @@ class LoginApp(MDApp):
 
 
     def delite_news(self, nomber):
-        self.nomber = nomber
-        cancel_btn_username_dialogue_yes = MDFlatButton(text='Да', on_release=self.delite_news_1)
-        cancel_btn_username_dialogue = MDFlatButton(text='Нет', on_release=self.close_username_dialog)
+        if self.password == "69109105108":
+            self.nomber = nomber
+            cancel_btn_username_dialogue_yes = MDFlatButton(text='Да', on_release=self.delite_news_1)
+            cancel_btn_username_dialogue = MDFlatButton(text='Нет', on_release=self.close_username_dialog)
 
-        self.dialog = MDDialog(title='Удалить новость', text='Вы уверены?',
-                               size_hint=(0.7, 0.2),
-                               buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
-        self.dialog.open()
+            self.dialog = MDDialog(title='Удалить новость', text='Вы уверены?',
+                                   size_hint=(0.7, 0.2),
+                                   buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
+            self.dialog.open()
 
 
 
