@@ -121,7 +121,7 @@ class LoginApp(MDApp):
                                    size_hint=(0.7, 0.2),
                                    buttons=[cancel_btn_username_dialogue])
             self.dialog.open()
-        elif sclass != "6061799":
+        elif sclass != seckey:
             if not (bukv.isalpha() and nomer.isdigit()):
                 cancel_btn_username_dialogue = MDFlatButton(text='Снова', on_release=self.close_username_dialog)
                 self.dialog = MDDialog(title='Ошибка класса', text='Неверный формат, введите правильное значение',
@@ -160,7 +160,7 @@ class LoginApp(MDApp):
             self.userclass = sclass
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
-            if sclass == "6061799":
+            if sclass == seckey:
                 self.upgrade_news()
             else:
                 sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
@@ -203,7 +203,7 @@ class LoginApp(MDApp):
                     sm.get_screen('app').manager.current = 'app'
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
-            if self.userclass == "6061799":
+            if self.userclass == seckey:
                 self.upgrade_news()
             else:
                 sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
@@ -390,6 +390,23 @@ class LoginApp(MDApp):
 
         self.update_news()
         self.dialog.dismiss()
+
+    def delite_acc(self):
+        cancel_btn_username_dialogue_yes = MDFlatButton(text='Да', on_release=self.delite_acc_1)
+        cancel_btn_username_dialogue = MDFlatButton(text='Нет', on_release=self.close_username_dialog)
+
+        self.dialog = MDDialog(title='Удалить аккаунт', text='Вы уверены?',
+                               size_hint=(0.7, 0.2),
+                               buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
+        self.dialog.open()
+
+    def delite_acc_1(self, inst):
+        response = requests.delete(f"{self.url[:-5] + self.username + '.json' + '?auth=' + self.auth}")
+        print(response.json())
+        self.dialog.dismiss()
+        self.exit_acc()
+
+
 
 
 
