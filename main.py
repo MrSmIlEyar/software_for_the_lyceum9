@@ -16,8 +16,9 @@ import datetime
 DAYS = ['Zero', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 TIMES = ['Zero', '8:00 - 8:45', '8:55 - 9:40', '9:50 - 10:35', '10:50 - 11:30', '11:50 - 12:35', '12:45 - 13:30',
          '13:35 - 14:25', '14:30 - 15:20']
-TIMES_SATURDAY = ['Zero', '8:00 - 8:40', '8:45 - 9:25', '9:30 - 10:10', '10:20 - 11:00', '11:10 - 11:50', '12:00 - 12:40',
-         '12:45 - 13:25']
+TIMES_SATURDAY = ['Zero', '8:00 - 8:40', '8:45 - 9:25', '9:30 - 10:10', '10:20 - 11:00', '11:10 - 11:50',
+                  '12:00 - 12:40',
+                  '12:45 - 13:25']
 seckey = "6061799"
 
 
@@ -65,6 +66,9 @@ class LoginApp(MDApp):
         sm.add_widget(RegistrationScreen(name='registration'))
         sm.add_widget(MainScreen(name='app'))
         # sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+        self.authorise = False
+        self.initial = 0
+        self.now_pad = "Новости"
         with open('resources/bd_date.txt', encoding="utf-8") as f:
             b = f.readlines()
             self.url = b[0][:-1]
@@ -74,10 +78,12 @@ class LoginApp(MDApp):
             self.authnews = b[4][:-1]
             self.authsch = b[5][:-1]
         request = requests.get(self.urlsch + '?auth=' + self.authsch)
+
         print(self.urlsch + '?auth=' + self.authsch)
         self.weekday = datetime.datetime.today().weekday() + 1
         self.school_data = request.json()
         self.fonter = 18
+
 
         with open('resources/check.txt', encoding="utf-8") as f:
             b = f.read()
@@ -159,6 +165,7 @@ class LoginApp(MDApp):
                 print((to_database))
                 with open('resources/check.txt', 'w', encoding="utf-8") as f:
                     f.write(f'1,{user},{password},{int(self.fonter)}')
+                self.authorise = True
                 requests.patch(url=self.url, json=to_database)
                 self.userclass = sclass
                 sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
@@ -188,7 +195,6 @@ class LoginApp(MDApp):
             else:
                 sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             sm.get_screen('app').manager.current = 'app'
-
 
     def login(self):
         with open('resources/check.txt', encoding="utf-8") as f:
@@ -225,6 +231,7 @@ class LoginApp(MDApp):
                     print(p)
                     f.write(p)
                     sm.get_screen('app').manager.current = 'app'
+            self.authorise = True
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
             if self.userclass == seckey:
@@ -364,7 +371,6 @@ class LoginApp(MDApp):
         sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
         sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
 
-
     def upgrade_news(self):
         sm.screens[2].ids.rb.size_hint = (0.00001, 0.00001)
         sm.screens[2].ids.lb.size_hint = (0.00001, 0.000001)
@@ -385,7 +391,6 @@ class LoginApp(MDApp):
         requests.patch(url=self.urlnews, json=to_database)
         self.update_news()
 
-
     def delite_news(self, nomber):
         if self.password == "69109105108":
             self.nomber = nomber
@@ -396,8 +401,6 @@ class LoginApp(MDApp):
                                    size_hint=(0.7, 0.2),
                                    buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
             self.dialog.open()
-
-
 
     def delite_news_1(self, inst):
 
@@ -431,6 +434,8 @@ class LoginApp(MDApp):
         self.dialog.dismiss()
         self.exit_acc()
 
+    def now_pad_move(self, zet):
+        self.now_pad = zet
 
 
 

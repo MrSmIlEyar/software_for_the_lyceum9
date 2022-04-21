@@ -207,12 +207,14 @@
                 text: 'Новости'
                 icon: 'feather'
                 badge_icon: "numeric-10"
+                on_tab_release: app.now_pad_move("Новости")
 
             MDBottomNavigationItem:
                 id: schnav
                 name: 'screen 2'
                 icon: 'calendar-blank-outline'
                 text: 'Расписание'
+                on_tab_release: app.now_pad_move("Расписание")
 
                 MDRoundFlatButton:
                     text : ' '
@@ -251,6 +253,11 @@
                 name: 'screen 3'
                 icon: 'cog'
                 text: 'Настройки'
+                # on_tab_touch_down: print("on_tab_touch_down")
+                # on_tab_touch_move: print("on_tab_touch_move")
+                # on_tab_touch_up: print("on_tab_touch_up")
+                # on_tab_press: print("on_tab_press")
+                on_tab_release: app.now_pad_move("Настройки")
 
                 MDCard :
                     size_hint: None, None
@@ -527,6 +534,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+
+
 
 
 <MDEmilNewsCard>
