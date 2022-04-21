@@ -10,6 +10,7 @@ from kivy.core.window import Window
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.label import MDLabel
 from kivymd.uix.card import MDCard
+from kivy.utils import get_color_from_hex
 import requests
 import datetime
 
@@ -78,12 +79,10 @@ class LoginApp(MDApp):
             self.authnews = b[4][:-1]
             self.authsch = b[5][:-1]
         request = requests.get(self.urlsch + '?auth=' + self.authsch)
-
         print(self.urlsch + '?auth=' + self.authsch)
         self.weekday = datetime.datetime.today().weekday() + 1
         self.school_data = request.json()
         self.fonter = 18
-
 
         with open('resources/check.txt', encoding="utf-8") as f:
             b = f.read()
@@ -281,6 +280,7 @@ class LoginApp(MDApp):
 
         for i in range(len(newslist) + 1, 11):
             exec(f"root.ids.card{i}.size_hint = (1, 0)")
+        # root.ids.card5.md_bg_color = get_color_from_hex("#080808")
         self.news_up = root
         return root
 
@@ -394,16 +394,17 @@ class LoginApp(MDApp):
     def delite_news(self, nomber):
         if self.password == "69109105108":
             self.nomber = nomber
-            cancel_btn_username_dialogue_yes = MDFlatButton(text='Да', on_release=self.delite_news_1)
-            cancel_btn_username_dialogue = MDFlatButton(text='Нет', on_release=self.close_username_dialog)
+            cancel_btn_username_dialogue_yes = MDFlatButton(text='Удалить', on_release=self.delite_news_1)
+            cancel_btn_username_dialogue = MDFlatButton(text='Отмена', on_release=self.close_username_dialog)
+            cancel_btn_username_dialogue_redaction = MDFlatButton(text='Изменить', on_release=self.redactor_news)
 
-            self.dialog = MDDialog(title='Удалить новость', text='Вы уверены?',
+            self.dialog = MDDialog(title='Править новость', text='Вы уверены?',
                                    size_hint=(0.7, 0.2),
-                                   buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
+                                   buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes,
+                                            cancel_btn_username_dialogue_redaction])
             self.dialog.open()
 
     def delite_news_1(self, inst):
-
         nomber = self.nomber
         print(self.news_data[0][nomber - 1][0])
         s = self.news_data[0][nomber - 1][0]
@@ -417,6 +418,10 @@ class LoginApp(MDApp):
         print(response.json())
 
         self.update_news()
+        self.dialog.dismiss()
+
+
+
         self.dialog.dismiss()
 
     def delite_acc(self):
@@ -437,7 +442,16 @@ class LoginApp(MDApp):
     def now_pad_move(self, zet):
         self.now_pad = zet
 
+    def redactor_news(self, inst):
+        nomber = self.nomber
+        print(self.news_data[0][nomber - 1][0])
+        s = self.news_data[0][nomber - 1][0]
+        s_2 = self.news_data[0][nomber - 1][1]
 
+        self.cardnews.ids.get_zag.text = s
+        self.cardnews.ids.get_text.text = s_2
+        sm.get_screen('app').ids.botnav.switch_tab("screen 2")
+        self.dialog.dismiss()
 
 
 
