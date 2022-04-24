@@ -252,11 +252,6 @@
                 name: 'screen 3'
                 icon: 'cog'
                 text: 'Настройки'
-                # on_tab_touch_down: print("on_tab_touch_down")
-                # on_tab_touch_move: print("on_tab_touch_move")
-                # on_tab_touch_up: print("on_tab_touch_up")
-                # on_tab_press: print("on_tab_press")
-                on_tab_release: app.now_pad_move("Настройки")
 
                 MDCard :
                     size_hint: None, None
@@ -345,7 +340,7 @@
     MDCard:
         size_hint: (1, 1)
         size: (Window.width - Window.width * 0.7, Window.height * 0.15)
-        elevation: 15
+        elevation: 0
         md_bg_color: [254 / 255, 255 / 255, 255 / 255, 1]
         padding: 20
         spacing: 30
@@ -360,7 +355,7 @@
     MDCard:
         size_hint: (1, 1)
         size: (Window.width - Window.width * 0.7, Window.height * 0.15)
-        elevation: 15
+        elevation: 0
         md_bg_color: [254 / 255, 255 / 255, 255 / 255, 1]
         padding: 20
         spacing: 30
@@ -397,6 +392,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(1)
 
             MDCard:
                 orientation: 'vertical'
@@ -413,6 +410,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(2)
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
@@ -428,6 +427,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(3)
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
@@ -443,6 +444,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(4)
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
@@ -458,6 +461,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(5)
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
@@ -473,6 +478,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(6)
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
@@ -488,6 +495,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(7)
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
@@ -503,6 +512,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(8)
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
@@ -518,6 +529,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
+                    on_ref_press:
+                        app.openlink(9)
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
@@ -533,8 +546,8 @@
                         '''                        '''
                     size_hint_y: None
                     height: self.texture_size[1] + 2 * self.padding[1]
-
-
+                    on_ref_press:
+                        app.openlink(10)
 
 
 <MDEmilNewsCard>

@@ -1,10 +1,12 @@
 from kivy.lang import Builder
 from kivy.metrics import sp
+from kivy.properties import StringProperty
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 import json
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.gridlayout import MDGridLayout
 from kivy.core.window import Window
 from kivy.uix.scrollview import ScrollView
@@ -13,6 +15,9 @@ from kivymd.uix.card import MDCard
 from kivy.utils import get_color_from_hex
 import requests
 import datetime
+import ast
+
+from kivymd.uix.tab import MDTabsBase
 
 DAYS = ['Zero', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 TIMES = ['Zero', '8:00 - 8:45', '8:55 - 9:40', '9:50 - 10:35', '10:50 - 11:30', '11:50 - 12:35', '12:45 - 13:30',
@@ -22,6 +27,14 @@ TIMES_SATURDAY = ['Zero', '8:00 - 8:40', '8:45 - 9:25', '9:30 - 10:10', '10:20 -
                   '12:45 - 13:25']
 seckey = "6061799"
 
+
+# class RusTab(MDFloatLayout, MDTabsBase):
+#     '''Class implementing content for a tab.'''
+#     pass
+#
+# class MathTab(MDFloatLayout, MDTabsBase):
+#     '''Class implementing content for a tab.'''
+#     pass
 
 class LoginScreen(Screen):
     pass
@@ -73,14 +86,25 @@ class LoginApp(MDApp):
         with open('resources/bd_date.txt', encoding="utf-8") as f:
             b = f.readlines()
             self.url = b[0][:-1]
+            print(self.url)
             self.urlnews = b[1][:-1]
             self.urlsch = b[2][:-1]
             self.auth = b[3][:-1]
             self.authnews = b[4][:-1]
             self.authsch = b[5][:-1]
+            print(self.authsch)
         request = requests.get(self.urlsch + '?auth=' + self.authsch)
         print(self.urlsch + '?auth=' + self.authsch)
         self.weekday = datetime.datetime.today().weekday() + 1
+        self.time = str(datetime.datetime.today().time()).split(':')
+        print(self.time)
+        if self.weekday == 7:
+            self.weekday = 1
+        else:
+            if self.time[0] > '19':
+                self.weekday += 1
+                if self.weekday == 7:
+                    self.weekday = 1
         self.school_data = request.json()
         self.fonter = 18
 
@@ -190,8 +214,10 @@ class LoginApp(MDApp):
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
             if sclass == seckey:
+                self.type = 1
                 self.upgrade_news()
             else:
+                self.type = 0
                 sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             sm.get_screen('app').manager.current = 'app'
 
@@ -208,6 +234,8 @@ class LoginApp(MDApp):
                 password = b[2]
                 self.fonter = int(b[3])
         self.login_check = False
+        # sm.get_screen('app').ids.tabs.add_widget(RusTab(title=f"Русский язык"))
+        # sm.get_screen('app').ids.tabs.add_widget(MathTab(title=f"Математика"))
         supported_loginEmail = user.replace('.', '-')
         supported_loginPassword = password.replace('.', '-')
         request = requests.get(self.url + '?auth=' + self.auth)
@@ -234,8 +262,10 @@ class LoginApp(MDApp):
             sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
             sm.screens[2].ids.getfont.text = str(int(self.fonter))
             if self.userclass == seckey:
+                self.type = 1
                 self.upgrade_news()
             else:
+                self.type = 0
                 sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
             return sm.screens[2]
         else:
@@ -269,7 +299,16 @@ class LoginApp(MDApp):
     def makenews(self):
         root = MDNewsMak()
         newslist = self.get_news()
-        print(newslist)
+        for i in range(len(newslist)):
+            if 'http' in newslist[i][1]:
+                m = newslist[i][1].split()
+                for j in range(len(m)):
+                    if m[j].startswith('http'):
+                        m[j] = f'[color=#353e96][u][ref="{m[j]}"]{m[j]}[/ref][/u][/color]'
+                        newslist[i][1] = ' '.join(m)
+                        print('Вот оно:', newslist[i][1])
+                        break
+                    print(m)
         self.news_col = len(newslist)
         numb = 1
         for i in newslist:
@@ -317,7 +356,7 @@ class LoginApp(MDApp):
         root = ScrollView(size_hint=(0.719, 1), size=(Window.width - Window.width / 3, Window.height),
                           pos_hint={'center_x': .5, 'center_y': .4})
         root.add_widget(layout)
-        self.sch = root, day
+        self.sch = root, day, self.daylabel, layout
         return root
 
     def arrow_right(self):
@@ -382,14 +421,29 @@ class LoginApp(MDApp):
         zagolovok = self.cardnews.ids.get_zag.text
         text_news = self.cardnews.ids.get_text.text
         print(zagolovok, text_news)
-        signup_info = str({
-            f'"{zagolovok}":"{text_news}"'})
-        signup_info = signup_info.replace(".", "$")
-        signup_info = signup_info.replace("\'", "")
-        signup_info = signup_info.replace("%", "PROCENT")
-        to_database = json.loads(signup_info)
-        requests.patch(url=self.urlnews, json=to_database)
-        self.update_news()
+        k = text_news.count('http')
+        if k <= 1:
+
+            signup_info = {
+                f'{zagolovok}':f'{text_news}'}
+            to_database = ast.literal_eval(json.dumps(signup_info))
+            print(to_database)
+            self.cardnews.ids.get_zag.text = ''
+            text_news = self.cardnews.ids.get_text.text = ''
+            # signup_info = signup_info.replace(".", "$")
+            # # signup_info = signup_info.replace("\'", "")
+            # signup_info = signup_info.replace("%", "PROCENT")
+            # to_database = json.loads(signup_info)
+            c = requests.patch(url=self.urlnews, json=to_database)
+            print(c, c.reason)
+            self.update_news()
+        else:
+            cancel_btn_username_dialogue = MDFlatButton(text='Ок', on_release=self.close_username_dialog)
+
+            self.dialog = MDDialog(title='Ошибка', text='В тексте новости пока что доступна только 1 ссылка.',
+                                   size_hint=(0.7, 0.2),
+                                   buttons=[cancel_btn_username_dialogue])
+            self.dialog.open()
 
     def delite_news(self, nomber):
         if self.password == "69109105108":
@@ -420,7 +474,12 @@ class LoginApp(MDApp):
         self.update_news()
         self.dialog.dismiss()
 
-
+    def update_sch(self):
+        if self.type == 0:
+            sm.get_screen('app').ids.schnav.remove_widget(self.sch[3])
+            sm.get_screen('app').ids.schnav.remove_widget(self.sch[0])
+            sm.get_screen('app').ids.schnav.remove_widget(self.sch[2])
+            sm.get_screen('app').ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
 
         self.dialog.dismiss()
 
@@ -444,15 +503,37 @@ class LoginApp(MDApp):
 
     def redactor_news(self, inst):
         nomber = self.nomber
-        print(self.news_data[0][nomber - 1][0])
         s = self.news_data[0][nomber - 1][0]
         s_2 = self.news_data[0][nomber - 1][1]
-
+        s_2 = s_2.split()
+        print(s_2)
+        for i in s_2:
+            w = i.split('[')
+            print(w)
+            for j in w:
+                if j.startswith("ref="):
+                    q = j[j.index('ref=')+5:j.index(']')-1]
+                    break
+        for i in range(len(s_2)):
+            if '[ref=' in s_2[i]:
+                s_2[i] = q
+                break
+        s_2 = ' '.join(s_2)
         self.cardnews.ids.get_zag.text = s
         self.cardnews.ids.get_text.text = s_2
         sm.get_screen('app').ids.botnav.switch_tab("screen 2")
         self.dialog.dismiss()
 
+    def openlink(self, id):
+        import webbrowser
+        text = self.news_data[0][id-1][1]
+        m = text.split('[')
+        for i in m:
+            if i.startswith('ref='):
+                link = i[i.index('ref=')+5:-1]
+                link = link.split("']")
+                webbrowser.open(link[0])
+                break
 
 
 LoginApp().run()
