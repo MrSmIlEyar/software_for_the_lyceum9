@@ -280,7 +280,7 @@ class LoginApp(MDApp):
 
         for i in range(len(newslist) + 1, 11):
             exec(f"root.ids.card{i}.size_hint = (1, 0)")
-        # root.ids.card5.md_bg_color = get_color_from_hex("#080808")
+        # root.ids.card5.md_bg_color = get_color_from_hex("#AAAAAA")
         self.news_up = root
         return root
 
