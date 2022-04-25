@@ -207,13 +207,13 @@
                 text: 'Новости'
                 icon: 'feather'
                 badge_icon: "numeric-10"
-                on_tab_release: app.now_pad_move("Новости")
+                on_tab_release: app.update_news()
             MDBottomNavigationItem:
                 id: schnav
                 name: 'screen 2'
                 icon: 'calendar-blank-outline'
                 text: 'Расписание'
-                on_tab_release: app.now_pad_move("Расписание")
+                on_tab_release: app.update_news()
 
                 MDRoundFlatButton:
                     text : ' '

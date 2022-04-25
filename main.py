@@ -16,6 +16,7 @@ from kivy.utils import get_color_from_hex
 import requests
 import datetime
 import ast
+import threading
 
 from kivymd.uix.tab import MDTabsBase
 
@@ -83,6 +84,7 @@ class LoginApp(MDApp):
         self.authorise = False
         self.initial = 0
         self.now_pad = "Новости"
+        self.first_zapusk = True
         with open('resources/bd_date.txt', encoding="utf-8") as f:
             b = f.readlines()
             self.url = b[0][:-1]
@@ -298,7 +300,11 @@ class LoginApp(MDApp):
 
     def makenews(self):
         root = MDNewsMak()
-        newslist = self.get_news()
+        if self.first_zapusk:
+            newslist = self.get_news()
+            self.first_zapusk = False
+        else:
+            newslist = self.news_data[0]
         for i in range(len(newslist)):
             if 'http' in newslist[i][1]:
                 m = newslist[i][1].split()
@@ -407,7 +413,20 @@ class LoginApp(MDApp):
         LoginApp().stop()
 
     def update_news(self):
+        # init threads
         sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
+
+        t1 = threading.Thread(target=self.get_news(), args=())
+        t2 = threading.Thread(target=self.makenews(), args=())
+
+        # start threads
+        t2.start()
+        t1.start()
+
+        # join threads to the main thread
+        t2.join()
+        t1.join()
+
         sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
 
     def upgrade_news(self):
@@ -425,7 +444,7 @@ class LoginApp(MDApp):
         if k <= 1:
 
             signup_info = {
-                f'{zagolovok}':f'{text_news}'}
+                f'{zagolovok}': f'{text_news}'}
             to_database = ast.literal_eval(json.dumps(signup_info))
             print(to_database)
             self.cardnews.ids.get_zag.text = ''
@@ -512,7 +531,7 @@ class LoginApp(MDApp):
             print(w)
             for j in w:
                 if j.startswith("ref="):
-                    q = j[j.index('ref=')+5:j.index(']')-1]
+                    q = j[j.index('ref=') + 5:j.index(']') - 1]
                     break
         for i in range(len(s_2)):
             if '[ref=' in s_2[i]:
@@ -526,11 +545,11 @@ class LoginApp(MDApp):
 
     def openlink(self, id):
         import webbrowser
-        text = self.news_data[0][id-1][1]
+        text = self.news_data[0][id - 1][1]
         m = text.split('[')
         for i in m:
             if i.startswith('ref='):
-                link = i[i.index('ref=')+5:-1]
+                link = i[i.index('ref=') + 5:-1]
                 link = link.split("']")
                 webbrowser.open(link[0])
                 break
