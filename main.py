@@ -52,6 +52,9 @@ class MainScreen(Screen):
 class MDCardNews(MDCard):
     pass
 
+class ErrorCard(MDCard):
+    pass
+
 
 class MDEmilNewsCard(MDCard):
     pass
@@ -320,7 +323,9 @@ class LoginApp(MDApp):
         for i in newslist:
             s = f'''[size={int(sp(self.fonter))}][b]{i[0]}[/b]
 {i[1]}'''
+
             exec(f"root.ids.label{numb}.text = '''{s}'''")
+
             numb += 1
 
         for i in range(len(newslist) + 1, 11):
@@ -366,6 +371,7 @@ class LoginApp(MDApp):
         return root
 
     def arrow_right(self):
+        t1 = threading.Thread(target=self.update_news())
         curday = int(self.sch[1][3::])
         if curday == 6:
             curday = 1
@@ -373,9 +379,12 @@ class LoginApp(MDApp):
             curday += 1
         sm.screens[2].ids.schnav.remove_widget(self.sch[0])
         sm.screens[2].ids.schnav.remove_widget(self.daylabel)
-        sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2))
+        t2 = threading.Thread(target=sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2)))
+        t2.start(), t1.start()
+        t2.join(), t1.join()
 
     def arrow_left(self):
+        t1 = threading.Thread(target=self.update_news())
         curday = int(self.sch[1][3::])
         if curday == 1:
             curday = 6
@@ -383,7 +392,10 @@ class LoginApp(MDApp):
             curday -= 1
         sm.screens[2].ids.schnav.remove_widget(self.sch[0])
         sm.screens[2].ids.schnav.remove_widget(self.daylabel)
-        sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2))
+        t2 = threading.Thread(target=sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2)))
+        t2.start(), t1.start()
+        t2.join(), t1.join()
+
 
     def getfontbut(self):
         if str(sm.screens[2].ids.getfont.text).isdigit():
@@ -412,22 +424,14 @@ class LoginApp(MDApp):
             f.write("0")
         LoginApp().stop()
 
-    def update_news(self):
-        # init threads
-        sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
-
-        t1 = threading.Thread(target=self.get_news(), args=())
-        t2 = threading.Thread(target=self.makenews(), args=())
-
-        # start threads
-        t2.start()
-        t1.start()
-
-        # join threads to the main thread
-        t2.join()
-        t1.join()
-
-        sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+    def update_news(self, r=True):
+        if r == True:
+            # Однопоточный:
+            sm.get_screen('app').ids.newsnav.remove_widget(self.news_up)
+            self.get_news()
+            sm.get_screen('app').ids.newsnav.add_widget(self.makenews())
+        elif r == "Нажал на расписание":
+            pass
 
     def upgrade_news(self):
         sm.screens[2].ids.rb.size_hint = (0.00001, 0.00001)
@@ -439,7 +443,6 @@ class LoginApp(MDApp):
     def get_upgrade_news(self):
         zagolovok = self.cardnews.ids.get_zag.text
         text_news = self.cardnews.ids.get_text.text
-        print(zagolovok, text_news)
         k = text_news.count('http')
         if k <= 1:
 
@@ -448,11 +451,7 @@ class LoginApp(MDApp):
             to_database = ast.literal_eval(json.dumps(signup_info))
             print(to_database)
             self.cardnews.ids.get_zag.text = ''
-            text_news = self.cardnews.ids.get_text.text = ''
-            # signup_info = signup_info.replace(".", "$")
-            # # signup_info = signup_info.replace("\'", "")
-            # signup_info = signup_info.replace("%", "PROCENT")
-            # to_database = json.loads(signup_info)
+
             c = requests.patch(url=self.urlnews, json=to_database)
             print(c, c.reason)
             self.update_news()
@@ -479,14 +478,12 @@ class LoginApp(MDApp):
 
     def delite_news_1(self, inst):
         nomber = self.nomber
-        print(self.news_data[0][nomber - 1][0])
         s = self.news_data[0][nomber - 1][0]
         s = s.replace("%", "PROCENT")
         s = s.replace("\'", "")
         s = s.replace(".", "$")
         s = s.replace(" ", "%20")
 
-        print(f"{self.urlnews[:-5] + s + '.json' + '?auth=' + self.authnews}")
         response = requests.delete(f"{self.urlnews[:-5] + s + '.json' + '?auth=' + self.authnews}")
         print(response.json())
 
@@ -525,10 +522,8 @@ class LoginApp(MDApp):
         s = self.news_data[0][nomber - 1][0]
         s_2 = self.news_data[0][nomber - 1][1]
         s_2 = s_2.split()
-        print(s_2)
         for i in s_2:
             w = i.split('[')
-            print(w)
             for j in w:
                 if j.startswith("ref="):
                     q = j[j.index('ref=') + 5:j.index(']') - 1]

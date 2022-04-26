@@ -207,13 +207,14 @@
                 text: 'Новости'
                 icon: 'feather'
                 badge_icon: "numeric-10"
-                on_tab_release: app.update_news()
+                on_tab_press: app.update_news("Нажал на расписание")
             MDBottomNavigationItem:
                 id: schnav
                 name: 'screen 2'
                 icon: 'calendar-blank-outline'
                 text: 'Расписание'
-                on_tab_release: app.update_news()
+                on_tab_press: app.update_news("Нажал на расписание")
+
 
                 MDRoundFlatButton:
                     text : ' '
@@ -378,6 +379,7 @@
 
 
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -396,6 +398,7 @@
                         app.openlink(1)
 
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -413,6 +416,7 @@
                     on_ref_press:
                         app.openlink(2)
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -430,6 +434,7 @@
                     on_ref_press:
                         app.openlink(3)
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -447,6 +452,7 @@
                     on_ref_press:
                         app.openlink(4)
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -464,6 +470,7 @@
                     on_ref_press:
                         app.openlink(5)
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -483,6 +490,7 @@
             MDCard:
                 orientation: 'vertical'
                 size_hint: 1, None
+                elevation: 0
                 # size: 280, 200
                 height: label7.height
                 id: card7
@@ -498,6 +506,7 @@
                     on_ref_press:
                         app.openlink(7)
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -515,6 +524,7 @@
                     on_ref_press:
                         app.openlink(8)
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -532,6 +542,7 @@
                     on_ref_press:
                         app.openlink(9)
             MDCard:
+                elevation: 0
                 orientation: 'vertical'
                 size_hint: 1, None
                 # size: 280, 200
@@ -586,3 +597,26 @@
             line_width : 1.5
             font_name: "resources/Vetka.otf"
 
+
+
+
+<ErrorCard>
+
+    MDCard:
+        elevation: 0
+        orientation: 'vertical'
+        size_hint: 1, None
+        # size: 280, 200
+        height: label4.height
+        id: card4
+        on_release: app.delite_news(4)
+        MDLabel:
+            id: label4
+            markup: True
+            padding: [15, 15]
+            text:
+                '''                        '''
+            size_hint_y: None
+            height: self.texture_size[1] + 2 * self.padding[1]
+            on_ref_press:
+                app.openlink(4)
