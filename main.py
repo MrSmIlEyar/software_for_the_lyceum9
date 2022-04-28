@@ -4,6 +4,7 @@ from kivy.properties import StringProperty
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 import json
+from kivymd.effects.stiffscroll import StiffScrollEffect
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.floatlayout import MDFloatLayout
@@ -137,6 +138,7 @@ class LoginApp(MDApp):
             a = '1000000000000000'
         bukv = a[-1]
         nomer = a[:-1]
+        print(bukv, nomer)
         request = requests.get(self.url + '?auth=' + self.auth)
         data = request.json()
         supported_loginEmail = user.replace('.', '-')
@@ -210,6 +212,7 @@ class LoginApp(MDApp):
                     sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
                 sm.get_screen('app').manager.current = 'app'
         else:
+            print(user, password1)
             self.password = password
             signup_info = str({
                 f'"{user}":{{"Password":"{password}","Username":"{user}","Name":"{name}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{sclass}"}}'})
@@ -310,13 +313,15 @@ class LoginApp(MDApp):
                 for zet, ix in value.items():
                     you.append(ix)
                 you[1] = you[1].replace("$", ".")
-                value = "[color=#A9A9A9]" + you[0] + "[/color]" + "\n" + you[1]
+                value = f"[size={int(self.fonter) - 5}][color=#A9A9A9]" + you[0] + "[/color][/size]" + "\n" + you[1]
             news.append([key, value])
         self.news_data = news, data
         return news
 
     def makenews(self):
         root = MDNewsMak()
+        root.ids.newssroll.effect_cls=StiffScrollEffect
+        newslist = self.get_news()
         if self.first_zapusk:
             newslist = self.get_news()
             self.first_zapusk = False
@@ -329,7 +334,9 @@ class LoginApp(MDApp):
                     if m[j].startswith('http'):
                         m[j] = f'[color=#353e96][u][ref="{m[j]}"]{m[j]}[/ref][/u][/color]'
                         newslist[i][1] = ' '.join(m)
+                        print('Вот оно:', newslist[i][1])
                         break
+                    print(m)
         self.news_col = len(newslist)
         numb = 1
         for i in newslist:
@@ -342,7 +349,7 @@ class LoginApp(MDApp):
 
         for i in range(len(newslist) + 1, 11):
             exec(f"root.ids.card{i}.size_hint = (1, 0)")
-        # root.ids.card5.md_bg_color = get_color_from_hex("#AAAAAA")
+        # root.ids.card5.md_bg_color = get_color_from_hex("#080808")
         self.news_up = root
         return root
 
@@ -355,11 +362,11 @@ class LoginApp(MDApp):
 
     def makeschledule(self, sclass, day, screennum):
         self.daylabel = MDLabel(text=DAYS[int(day[3:])], font_size=sp(53), font_style='Button',
-                                pos_hint={'center_y': .95}, halign='center')
+                                pos_hint={'center_y': .97}, halign='center')
         # pos = (Window.width // 2.3, Window.height / 2.6)
         sm.screens[screennum].ids.schnav.add_widget(self.daylabel)
         layout = MDGridLayout(size=(Window.width, Window.height), size_hint_x=1, size_hint_y=None, cols=2,
-                              row_default_height=sp(90), row_force_default=True, spacing=10)
+                              row_default_height=sp(90), row_force_default=True, spacing=15)
         layout.bind(minimum_height=layout.setter('height'))
         schlist = self.get_sch(sclass, day).split(':')
         numb = 1
@@ -377,7 +384,7 @@ class LoginApp(MDApp):
             layout.add_widget(cardles)
             numb += 1
         root = ScrollView(size_hint=(0.719, 1), size=(Window.width - Window.width / 3, Window.height),
-                          pos_hint={'center_x': .5, 'center_y': .4})
+                          pos_hint={'center_x': .5, 'center_y': .44})
         root.add_widget(layout)
         self.sch = root, day, self.daylabel, layout
         return root
@@ -456,6 +463,7 @@ class LoginApp(MDApp):
     def get_upgrade_news(self):
         zagolovok = self.cardnews.ids.get_zag.text
         text_news = self.cardnews.ids.get_text.text
+        print(zagolovok, text_news)
         k = text_news.count('http')
         if k <= 1:
 
@@ -556,7 +564,7 @@ class LoginApp(MDApp):
             w = i.split('[')
             for j in w:
                 if j.startswith("ref="):
-                    q = j[j.index('ref=') + 5:j.index(']') - 1]
+                    q = j[j.index('ref=')+5:j.index(']')-1]
                     break
         for i in range(len(s_2)):
             if '[ref=' in s_2[i]:
@@ -570,11 +578,11 @@ class LoginApp(MDApp):
 
     def openlink(self, id):
         import webbrowser
-        text = self.news_data[0][id - 1][1]
+        text = self.news_data[0][id-1][1]
         m = text.split('[')
         for i in m:
             if i.startswith('ref='):
-                link = i[i.index('ref=') + 5:-1]
+                link = i[i.index('ref=')+5:-1]
                 link = link.split("']")
                 webbrowser.open(link[0])
                 break
