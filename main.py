@@ -296,7 +296,14 @@ class LoginApp(MDApp):
         for key, value in data.items():
             key = key.replace("$", ".")
             key = key.replace("PROCENT", "%")
-            value = value.replace("$", ".")
+            try:
+                value = value.replace("$", ".")
+            except AttributeError:
+                you = []
+                for zet, ix in value.items():
+                    you.append(ix)
+                you[1] = you[1].replace("$", ".")
+                value = "[color=#A9A9A9]" + you[0] + "[/color]" + "  " + you[1]
             news.append([key, value])
         self.news_data = news, data
         return news
@@ -315,9 +322,7 @@ class LoginApp(MDApp):
                     if m[j].startswith('http'):
                         m[j] = f'[color=#353e96][u][ref="{m[j]}"]{m[j]}[/ref][/u][/color]'
                         newslist[i][1] = ' '.join(m)
-                        print('Вот оно:', newslist[i][1])
                         break
-                    print(m)
         self.news_col = len(newslist)
         numb = 1
         for i in newslist:
