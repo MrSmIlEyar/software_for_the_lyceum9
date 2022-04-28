@@ -201,11 +201,13 @@
             # selected_color_background: get_color_from_hex("#97ecf8")
             text_color_active: 0, 0, 0, 1
 
+
             MDBottomNavigationItem:
                 id: newsnav
                 name: 'screen 1'
                 text: 'Новости'
                 icon: 'feather'
+
                 badge_icon: "numeric-10"
                 on_tab_press: app.update_news("Нажал на расписание")
             MDBottomNavigationItem:
@@ -213,6 +215,7 @@
                 name: 'screen 2'
                 icon: 'calendar-blank-outline'
                 text: 'Расписание'
+
                 on_tab_press: app.update_news("Нажал на расписание")
 
 
@@ -254,7 +257,9 @@
                 icon: 'cog'
                 text: 'Настройки'
 
+
                 MDCard :
+                    id: settools
                     size_hint: None, None
                     size : sp(320), sp(450)
                     pos_hint : {"center_x":.5,"center_y":.5}
@@ -286,10 +291,10 @@
                         font_name: "resources/Vetka.otf"
 
                     MDRoundFlatButton:
-                        text : 'Удалить аккаунт'
+                        text : 'Настройки аккаунта'
                         pos_hint : {"center_x":.5}
                         font_size : sp(30)
-                        on_press: app.delite_acc()
+                        on_press: app.delite_acc("acc")
                         text_color: [0, 0, 0, 0.8]
                         line_color: [0.5, 0.39, 0.31, 0.5]
                         line_width : 1.5
@@ -600,23 +605,90 @@
 
 
 
-<ErrorCard>
+<AccountSettings>
+    MDCard :
+        id: accset
+        size_hint: 1, 1
+        elevation : 15
+        md_bg_color : [255/255,255/255,255/255,1]
+        padding : 20
+        spacing : 10
+        orientation : "vertical"
+        # Adding items to the card
+        MDGridLayout:
+            id: acset
+            cols: 1
+            padding: '10dp', '15dp'
+            spacing: '15dp'
+            pos_hint : {"center_x":.5}
 
-    MDCard:
-        elevation: 0
-        orientation: 'vertical'
-        size_hint: 1, None
-        # size: 280, 200
-        height: label4.height
-        id: card4
-        on_release: app.delite_news(4)
-        MDLabel:
-            id: label4
-            markup: True
-            padding: [15, 15]
-            text:
-                '''                        '''
-            size_hint_y: None
-            height: self.texture_size[1] + 2 * self.padding[1]
-            on_ref_press:
-                app.openlink(4)
+
+            MDTextFieldRound :
+                id: getusername_1
+                hint_text : "Имя"
+                icon_right : "account"
+                width : Window.width * 0.8
+                font_size : sp(25)
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+
+            MDTextFieldRound :
+                id: old_password
+                hint_text : "Старый пароль"
+                icon_right : "key-variant"
+                width : Window.width * 0.8
+                font_size : sp(25)
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+
+            MDTextFieldRound :
+                id: new_password
+                hint_text : "Новый пароль"
+                icon_right : "key-variant"
+                width : Window.width * 0.8
+                font_size : sp(25)
+                normal_color : [0.5, 0.39, 0.31, 0.5]
+                font_name: "resources/Vetka.otf"
+
+            MDRoundFlatButton:
+                text : 'Сохранить'
+                font_size : sp(30)
+                on_release: app.reborned()
+                text_color: [0, 0, 0, 0.8]
+                line_color: [0.5, 0.39, 0.31, 0.5]
+                line_width : 1.5
+                font_name: "resources/Vetka.otf"
+
+            MDRoundFlatButton:
+                text : 'Вернуться'
+                font_size : sp(30)
+                on_release: app.back_to_settings()
+                text_color: [0, 0, 0, 0.8]
+                line_color: [0.5, 0.39, 0.31, 0.5]
+                line_width : 1.5
+                font_name: "resources/Vetka.otf"
+
+            MDRoundFlatButton:
+                text : 'Удалить аккаунт'
+                font_size : sp(30)
+                on_release: app.delite_acc("del")
+                text_color: [0, 0, 0, 0.8]
+                line_color: [0.5, 0.39, 0.31, 0.5]
+                line_width : 1.5
+                font_name: "resources/Vetka.otf"
+
+            MDLabel:
+                id: error
+                markup: True
+                padding: [15, 15]
+                text:
+                    '''                        '''
+                size_hint_y: None
+                height: self.texture_size[1] + 2 * self.padding[1]
+
+
+
+
+
+
+

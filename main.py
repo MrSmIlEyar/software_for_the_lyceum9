@@ -52,6 +52,7 @@ class MainScreen(Screen):
 class MDCardNews(MDCard):
     pass
 
+
 class ErrorCard(MDCard):
     pass
 
@@ -69,6 +70,10 @@ class MDCardSchLesson(MDCard):
 
 
 class MDNewsMak(ScrollView):
+    pass
+
+
+class AccountSettings(MDCard):
     pass
 
 
@@ -132,7 +137,6 @@ class LoginApp(MDApp):
             a = '1000000000000000'
         bukv = a[-1]
         nomer = a[:-1]
-        print(bukv, nomer)
         request = requests.get(self.url + '?auth=' + self.auth)
         data = request.json()
         supported_loginEmail = user.replace('.', '-')
@@ -190,6 +194,8 @@ class LoginApp(MDApp):
                 signup_info = signup_info.replace(".", "-")
                 signup_info = signup_info.replace("\'", "")
                 to_database = json.loads(signup_info)
+                # self.user_info = {user: [password, user, name, surname, patronymic, sclass]}
+                self.user_info = signup_info
                 print((to_database))
                 with open('resources/check.txt', 'w', encoding="utf-8") as f:
                     f.write(f'1,{user},{password},{int(self.fonter)}')
@@ -204,12 +210,12 @@ class LoginApp(MDApp):
                     sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{self.weekday}', 2))
                 sm.get_screen('app').manager.current = 'app'
         else:
-            print(user, password1)
             self.password = password
             signup_info = str({
                 f'"{user}":{{"Password":"{password}","Username":"{user}","Name":"{name}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{sclass}"}}'})
             signup_info = signup_info.replace(".", "-")
             signup_info = signup_info.replace("\'", "")
+            self.user_info = signup_info
             to_database = json.loads(signup_info)
             print((to_database))
             with open('resources/check.txt', 'w', encoding="utf-8") as f:
@@ -253,6 +259,7 @@ class LoginApp(MDApp):
             self.username = data[supported_loginEmail]['Username']
             self.userclass = data[self.username]['Class']
             self.password = supported_loginPassword
+            self.user_info = data[supported_loginEmail]
             print(self.userclass)
             self.login_check = True
             if b[0] == '0':
@@ -303,7 +310,7 @@ class LoginApp(MDApp):
                 for zet, ix in value.items():
                     you.append(ix)
                 you[1] = you[1].replace("$", ".")
-                value = "[color=#A9A9A9]" + you[0] + "[/color]" + "  " + you[1]
+                value = "[color=#A9A9A9]" + you[0] + "[/color]" + "\n" + you[1]
             news.append([key, value])
         self.news_data = news, data
         return news
@@ -384,7 +391,8 @@ class LoginApp(MDApp):
             curday += 1
         sm.screens[2].ids.schnav.remove_widget(self.sch[0])
         sm.screens[2].ids.schnav.remove_widget(self.daylabel)
-        t2 = threading.Thread(target=sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2)))
+        t2 = threading.Thread(
+            target=sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2)))
         t2.start(), t1.start()
         t2.join(), t1.join()
 
@@ -397,10 +405,10 @@ class LoginApp(MDApp):
             curday -= 1
         sm.screens[2].ids.schnav.remove_widget(self.sch[0])
         sm.screens[2].ids.schnav.remove_widget(self.daylabel)
-        t2 = threading.Thread(target=sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2)))
+        t2 = threading.Thread(
+            target=sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2)))
         t2.start(), t1.start()
         t2.join(), t1.join()
-
 
     def getfontbut(self):
         if str(sm.screens[2].ids.getfont.text).isdigit():
@@ -504,16 +512,33 @@ class LoginApp(MDApp):
 
         self.dialog.dismiss()
 
-    def delite_acc(self):
-        cancel_btn_username_dialogue_yes = MDFlatButton(text='Да', on_release=self.delite_acc_1)
+    def delite_acc(self, x):
         cancel_btn_username_dialogue = MDFlatButton(text='Нет', on_release=self.close_username_dialog)
-
-        self.dialog = MDDialog(title='Удалить аккаунт', text='Вы уверены?',
-                               size_hint=(0.7, 0.2),
-                               buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
+        if x == "acc":
+            cancel_btn_username_dialogue_yes = MDFlatButton(text='Да', on_release=self.delite_acc_1)
+            self.dialog = MDDialog(title='Перейти в настройки аккаунта?', text='Вы уверены?',
+                                   size_hint=(0.7, 0.2),
+                                   buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
+        else:
+            cancel_btn_username_dialogue_yes = MDFlatButton(text='Да', on_release=self.delite_acc_2)
+            self.dialog = MDDialog(title='Удалить аккаунт?', text='Вы уверены?',
+                                   size_hint=(0.7, 0.2),
+                                   buttons=[cancel_btn_username_dialogue, cancel_btn_username_dialogue_yes])
         self.dialog.open()
 
     def delite_acc_1(self, inst):
+        self.accountset = AccountSettings()
+        self.basetools = sm.get_screen('app').ids.settools
+        sm.get_screen('app').ids.settoll.remove_widget(sm.get_screen('app').ids.settools)
+        sm.get_screen('app').ids.settoll.add_widget(self.accountset)
+        self.user_info = dict(self.user_info)
+        self.accountset.ids.getusername_1.text = self.user_info['Name']
+        # response = requests.delete(f"{self.url[:-5] + self.username + '.json' + '?auth=' + self.auth}")
+        # print(response.json())
+        self.dialog.dismiss()
+        # self.exit_acc()
+
+    def delite_acc_2(self, inst):
         response = requests.delete(f"{self.url[:-5] + self.username + '.json' + '?auth=' + self.auth}")
         print(response.json())
         self.dialog.dismiss()
@@ -553,6 +578,33 @@ class LoginApp(MDApp):
                 link = link.split("']")
                 webbrowser.open(link[0])
                 break
+
+    def reborned(self):
+        print(self.user_info)
+        print(self.accountset.ids)
+        user = self.accountset.ids.getusername_1.text
+        old_password = self.accountset.ids.old_password.text
+        old_password = "".join([str(ord(i)) for i in list(old_password)])
+        new_password = self.accountset.ids.new_password.text
+        new_password = "".join([str(ord(i)) for i in list(new_password)])
+        if old_password != "":
+            if old_password == self.user_info['Password']:
+                username = self.user_info["Username"]
+                self.user_info['Password'] = new_password
+                signup_info = str({
+                    f'"{user}":{{"Password":"{new_password}","Username":"{}","Name":"{name}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{sclass}"}}'})
+                signup_info = signup_info.replace(".", "-")
+                signup_info = signup_info.replace("\'", "")
+                to_database = json.loads(signup_info)
+                print((to_database))
+                requests.patch(url=self.url, json=to_database)
+            else:
+                self.accountset.ids.error.text = "Неправильный пароль"
+
+
+    def back_to_settings(self):
+        sm.get_screen('app').ids.settoll.remove_widget(self.accountset)
+        sm.get_screen('app').ids.settoll.add_widget(self.basetools)
 
 
 LoginApp().run()
