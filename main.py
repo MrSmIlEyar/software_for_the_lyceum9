@@ -477,7 +477,7 @@ class LoginApp(MDApp):
             self.dialog.open()
 
     def delite_news(self, nomber):
-        if self.password == "69109105108":
+        if self.userclass == "6061799":
             self.nomber = nomber
             cancel_btn_username_dialogue_yes = MDFlatButton(text='Удалить', on_release=self.delite_news_1)
             cancel_btn_username_dialogue = MDFlatButton(text='Отмена', on_release=self.close_username_dialog)
@@ -595,7 +595,7 @@ class LoginApp(MDApp):
                 sclass = self.user_info['Class']
                 self.user_info['Password'] = new_password
                 signup_info = str({
-                    f'"{username}":{{"Password":"{new_password}","Username":"{username}","Name":"{user}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{sclass}"}}'})
+                    f'"{username}":{{"Password":"{new_password}","Username":"{username}","Name":"{user}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{int(sclass)}"}}'})
                 signup_info = signup_info.replace(".", "-")
                 signup_info = signup_info.replace("\'", "")
                 to_database = json.loads(signup_info)
