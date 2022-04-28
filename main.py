@@ -589,10 +589,13 @@ class LoginApp(MDApp):
         new_password = "".join([str(ord(i)) for i in list(new_password)])
         if old_password != "":
             if old_password == self.user_info['Password']:
-                username = self.user_info["Username"]
+                username = self.user_info['Username']
+                surname = self.user_info['Surname']
+                patronymic = self.user_info['Patronymic']
+                sclass = self.user_info['Class']
                 self.user_info['Password'] = new_password
                 signup_info = str({
-                    f'"{user}":{{"Password":"{new_password}","Username":"{}","Name":"{name}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{sclass}"}}'})
+                    f'"{username}":{{"Password":"{new_password}","Username":"{username}","Name":"{user}","Surname":"{surname}","Patronymic":"{patronymic}","Class":"{sclass}"}}'})
                 signup_info = signup_info.replace(".", "-")
                 signup_info = signup_info.replace("\'", "")
                 to_database = json.loads(signup_info)
