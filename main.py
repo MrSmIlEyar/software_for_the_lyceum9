@@ -23,7 +23,7 @@ from kivymd.uix.tab import MDTabsBase
 
 DAYS = ['Zero', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 TIMES = ['Zero', '8:00 - 8:45', '8:55 - 9:40', '9:50 - 10:35', '10:50 - 11:30', '11:50 - 12:35', '12:45 - 13:30',
-         '13:35 - 14:25', '14:30 - 15:20']
+         '13:35 - 14:25', '14:35 - 15:20', '15:30 - 16:15', '16:25 - 17:10', '17:20 - 18:05', '18:10 - 18:55']
 TIMES_SATURDAY = ['Zero', '8:00 - 8:40', '8:45 - 9:25', '9:30 - 10:10', '10:20 - 11:00', '11:10 - 11:50',
                   '12:00 - 12:40',
                   '12:45 - 13:25']
@@ -333,7 +333,7 @@ class LoginApp(MDApp):
                 m = newslist[i][1].split()
                 for j in range(len(m)):
                     if m[j].startswith('http'):
-                        m[j] = f'[color=#353e96][u][ref="{m[j]}"]{m[j]}[/ref][/u][/color]'
+                        m[j] = f'-[color=#353e96][u][ref="{m[j]}"]{m[j]}[/ref][/u][/color]'
                         newslist[i][1] = ' '.join(m)
                         print('Вот оно:', newslist[i][1])
                         break
@@ -370,7 +370,8 @@ class LoginApp(MDApp):
                               row_default_height=sp(90), row_force_default=True, spacing=15)
         layout.bind(minimum_height=layout.setter('height'))
         schlist = self.get_sch(sclass, day).split(':')
-        numb = 1
+        numb = int(schlist[0])
+        schlist.pop(0)
         for i in schlist:
             cardnum = MDCardSchNumber()
             cardnum.ids.schnumlabel.font_size = sp(self.fonter + 2)
