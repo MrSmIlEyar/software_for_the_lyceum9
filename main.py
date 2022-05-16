@@ -105,6 +105,7 @@ class LoginApp(MDApp):
             self.authsch = b[5][:-1]
             print(self.authsch)
         request = requests.get(self.urlsch + '?auth=' + self.authsch)
+        self.app_color = [0.5, 0.39, 0.31, 1]
         print(self.urlsch + '?auth=' + self.authsch)
         self.weekday = datetime.datetime.today().weekday() + 1
         self.time = str(datetime.datetime.today().time()).split(':')
@@ -390,7 +391,6 @@ class LoginApp(MDApp):
         return root
 
     def arrow_right(self):
-        t1 = threading.Thread(target=self.update_news())
         curday = int(self.sch[1][3::])
         if curday == 6:
             curday = 1
@@ -398,13 +398,9 @@ class LoginApp(MDApp):
             curday += 1
         sm.screens[2].ids.schnav.remove_widget(self.sch[0])
         sm.screens[2].ids.schnav.remove_widget(self.daylabel)
-        t2 = threading.Thread(
-            target=sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2)))
-        t2.start(), t1.start()
-        t2.join(), t1.join()
+        sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2))
 
     def arrow_left(self):
-        t1 = threading.Thread(target=self.update_news())
         curday = int(self.sch[1][3::])
         if curday == 1:
             curday = 6
@@ -412,10 +408,8 @@ class LoginApp(MDApp):
             curday -= 1
         sm.screens[2].ids.schnav.remove_widget(self.sch[0])
         sm.screens[2].ids.schnav.remove_widget(self.daylabel)
-        t2 = threading.Thread(
-            target=sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2)))
-        t2.start(), t1.start()
-        t2.join(), t1.join()
+        sm.screens[2].ids.schnav.add_widget(self.makeschledule(self.userclass, f'day{curday}', 2))
+
 
     def getfontbut(self):
         if str(sm.screens[2].ids.getfont.text).isdigit():
